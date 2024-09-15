@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContextUser";
+import { useAuth } from "@/context/AuthContext/AuthContextUser";
 import { URLs } from "@/routes";
 
 export const description =

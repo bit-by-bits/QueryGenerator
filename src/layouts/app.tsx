@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-import { UserDropdown } from "@/components/home/user-dropdown";
+import { UserDropdown } from "@/components/layout/user-dropdown";
 import { URLs } from "@/routes";
 
 export const description =

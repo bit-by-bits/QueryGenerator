@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import LoginImg from "./assets/login.jpeg";
 import { URLs } from "./routes";
-import { AuthProvider } from "./context/AuthContextProvider";
+import { AuthProvider } from "./context/AuthContext/AuthContextProvider";
 import AppLayout from "./layouts/app";
 import AuthLayout from "./layouts/auth";
 import Home from "./pages/home";
