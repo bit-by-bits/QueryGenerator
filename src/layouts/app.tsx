@@ -87,7 +87,11 @@ const AppLayout = () => {
       </header>
 
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-        <Outlet />
+        <div className="flex h-full w-full flex-col bg-muted/40">
+          <div className="grid flex-1 items-start gap-4 md:gap-8">
+            <Outlet />
+          </div>
+        </div>
       </main>
     </div>
   );

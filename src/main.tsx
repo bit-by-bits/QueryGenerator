@@ -12,6 +12,7 @@ import ErrorPage from "./pages/error";
 import UnavailablePage from "./pages/unavailabe";
 import Login from "./pages/login";
 import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
+import Queries from "./pages/queries";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
       },
       {
         path: URLs.queries,
-        element: <UnavailablePage />,
+        element: <Queries />,
       },
       {
         path: URLs.inspect,
