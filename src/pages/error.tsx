@@ -1,9 +1,13 @@
+import { URLs } from "@/routes";
 import { Link, useRouteError } from "react-router-dom";
 
 interface RouteError {
   statusText?: string;
   message?: string;
 }
+
+export const description =
+  "Error page for when an unexpected error occurs. Includes a message and a link to go back to the login page.";
 
 export default function ErrorPage() {
   const error = useRouteError() as RouteError;
@@ -21,7 +25,7 @@ export default function ErrorPage() {
           {error.statusText || error.message}
         </p>
       )}
-      <Link to="/" className="mt-4 text-blue-500 underline">
+      <Link to={URLs.login} className="mt-4 text-blue-500 underline">
         {" "}
         ← Go back to login
       </Link>
