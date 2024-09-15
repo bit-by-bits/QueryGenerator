@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <UnavailablePage />,
   },
   {
-    path: '/home',
+    path: "/home",
     element: <Home />,
   },
   {
