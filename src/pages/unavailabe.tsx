@@ -2,7 +2,7 @@ import { URLs } from "@/routes";
 import { Link } from "react-router-dom";
 
 export const description =
-  "Unavailable page for when a page is not available. Includes a message and a link to go back to the login page.";
+  "Unavailable page for the Query Generator app. Displays a message and a link to go back to the login page.";
 
 export default function UnavailablePage() {
   return (

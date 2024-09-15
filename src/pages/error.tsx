@@ -7,7 +7,7 @@ interface RouteError {
 }
 
 export const description =
-  "Error page for when an unexpected error occurs. Includes a message and a link to go back to the login page.";
+  "Error page for the Query Generator app. Displays an error message and a link to go back to the login page.";
 
 export default function ErrorPage() {
   const error = useRouteError() as RouteError;

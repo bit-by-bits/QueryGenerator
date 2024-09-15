@@ -6,10 +6,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { CircleUser } from "lucide-react";
 
-export const UserDropdown = () => {
+const UserDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,3 +29,5 @@ export const UserDropdown = () => {
     </DropdownMenu>
   );
 };
+
+export default UserDropdown;

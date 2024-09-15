@@ -5,6 +5,7 @@ export const URLs = {
   google: "/auth/google",
   signUp: "/auth/signup",
   app: "/app",
-  home: "/app/home",
+  filters: "/app/filters",
+  queries: "/app/queries",
   inspect: "/app/inspect",
 };

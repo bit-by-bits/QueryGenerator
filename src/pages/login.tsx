@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext/AuthContextUser";
 import { URLs } from "@/routes";
 
 export const description =
-  "Login page for the Query Generator app. Includes a form to enter email and password, and links to sign up or reset password.";
+  "Login page for the Query Generator app. Users can login with their email and password.";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -23,7 +23,7 @@ function Login() {
 
     try {
       await login(email, password);
-      navigate(URLs.home);
+      navigate(URLs.filters);
       console.log("Logged in successfully");
     } catch (err) {
       setError("Invalid credentials");

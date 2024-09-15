@@ -5,16 +5,20 @@ import { TableCell, TableRow } from "@/components/ui/table";
 interface MinMaxInputProps {
   label: string;
   idPrefix: string;
-  minDefault: string;
-  maxDefault: string;
+  minValue: number;
+  maxValue: number;
+  onMinChange: (value: number) => void;
+  onMaxChange: (value: number) => void;
 }
 
-function MinMaxInput({
+const MinMaxInput: React.FC<MinMaxInputProps> = ({
   label,
   idPrefix,
-  minDefault,
-  maxDefault,
-}: MinMaxInputProps) {
+  minValue,
+  maxValue,
+  onMinChange,
+  onMaxChange,
+}) => {
   return (
     <TableRow>
       <TableCell className="font-semibold">{label}</TableCell>
@@ -22,16 +26,26 @@ function MinMaxInput({
         <Label htmlFor={`min-${idPrefix}`} className="sr-only">
           Minimum {label}
         </Label>
-        <Input id={`min-${idPrefix}`} type="number" defaultValue={minDefault} />
+        <Input
+          id={`min-${idPrefix}`}
+          type="number"
+          value={minValue}
+          onChange={(e) => onMinChange(parseFloat(e.target.value))}
+        />
       </TableCell>
       <TableCell>
         <Label htmlFor={`max-${idPrefix}`} className="sr-only">
           Maximum {label}
         </Label>
-        <Input id={`max-${idPrefix}`} type="number" defaultValue={maxDefault} />
+        <Input
+          id={`max-${idPrefix}`}
+          type="number"
+          value={maxValue}
+          onChange={(e) => onMaxChange(parseFloat(e.target.value))}
+        />
       </TableCell>
     </TableRow>
   );
-}
+};
 
 export default MinMaxInput;

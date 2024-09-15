@@ -12,13 +12,22 @@ interface SelectFieldProps {
   label: string;
   placeholder: string;
   options: string[];
+  value: string;
+  onChange: (value: string) => void;
 }
 
-function SelectField({ id, label, placeholder, options }: SelectFieldProps) {
+const SelectField: React.FC<SelectFieldProps> = ({
+  id,
+  label,
+  placeholder,
+  options,
+  value,
+  onChange,
+}) => {
   return (
     <div className="grid gap-3">
       <Label htmlFor={id}>{label}</Label>
-      <Select>
+      <Select onValueChange={onChange} value={value}>
         <SelectTrigger id={id} aria-label={label}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -32,6 +41,6 @@ function SelectField({ id, label, placeholder, options }: SelectFieldProps) {
       </Select>
     </div>
   );
-}
+};
 
 export default SelectField;

@@ -13,7 +13,11 @@ interface FilterCardProps {
   children: ReactNode;
 }
 
-function FilterCard({ title, description, children }: FilterCardProps) {
+const FilterCard: React.FC<FilterCardProps> = ({
+  title,
+  description,
+  children,
+}) => {
   return (
     <Card>
       <CardHeader>
@@ -23,6 +27,6 @@ function FilterCard({ title, description, children }: FilterCardProps) {
       <CardContent>{children}</CardContent>
     </Card>
   );
-}
+};
 
 export default FilterCard;

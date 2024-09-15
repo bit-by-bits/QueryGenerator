@@ -7,10 +7,11 @@ import { URLs } from "./routes";
 import { AuthProvider } from "./context/AuthContext/AuthContextProvider";
 import AppLayout from "./layouts/app";
 import AuthLayout from "./layouts/auth";
-import Home from "./pages/home";
+import Filters from "./pages/filters";
 import ErrorPage from "./pages/error";
 import UnavailablePage from "./pages/unavailabe";
 import Login from "./pages/login";
+import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
 
 const router = createBrowserRouter([
   {
@@ -42,8 +43,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: URLs.home,
-        element: <Home />,
+        path: URLs.filters,
+        element: <Filters />,
+      },
+      {
+        path: URLs.queries,
+        element: <UnavailablePage />,
       },
       {
         path: URLs.inspect,
@@ -59,7 +64,9 @@ if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <FiltersProvider>
+          <RouterProvider router={router} />
+        </FiltersProvider>
       </AuthProvider>
     </StrictMode>,
   );
