@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  DotsHorizontalIcon,
+  DotsHorizontalIcon
 } from "@radix-ui/react-icons";
 
 import { cn } from "@/lib/utils";
@@ -54,9 +54,9 @@ const PaginationLink = ({
     className={cn(
       buttonVariants({
         variant: isActive ? "outline" : "ghost",
-        size,
+        size
       }),
-      className,
+      className
     )}
     {...props}
   />
@@ -117,5 +117,5 @@ export {
   PaginationItem,
   PaginationPrevious,
   PaginationNext,
-  PaginationEllipsis,
+  PaginationEllipsis
 };

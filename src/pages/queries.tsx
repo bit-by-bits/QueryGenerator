@@ -5,7 +5,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import {
   Table,
@@ -13,41 +13,92 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import patients from "@/data/patients.json";
 import FilterButton from "@/components/queries/filter-button";
 import ExportButton from "@/components/queries/export-button";
 import ModifyFiltersButton from "@/components/queries/modify-filters-button";
 import TablePagination from "@/components/queries/table-pagination";
+import { Filters } from "@/context/FilterContext/FiltersContextProvider";
+import { useFilters } from "@/context/FilterContext/FiltersContextUser";
 
 // Pagination constants
 const ITEMS_PER_PAGE = 10;
 
+const filterPatients = (patients: any[], filters: Filters) => {
+  return patients.filter(patient => {
+    const patientAge = patient["Patient Age"];
+    const patientWeight = patient["Patient Weight"];
+    const patientHeight = patient["Patient Height"];
+    const testDate = new Date(patient["Test Date"]);
+
+    const from = new Date(filters.fromDate);
+    const to = new Date(filters.toDate);
+
+    return (
+      (!filters.testName || patient["Test Name"].includes(filters.testName)) &&
+      filters.minAge <= patientAge &&
+      patientAge <= filters.maxAge &&
+      filters.minWeight <= patientWeight &&
+      patientWeight <= filters.maxWeight &&
+      filters.minHeight <= patientHeight &&
+      patientHeight <= filters.maxHeight &&
+      from <= testDate &&
+      testDate <= to &&
+      (!filters.gender || patient["Patient Gender"] === filters.gender) &&
+      (!filters.state || patient["Patient State"] === filters.state)
+    );
+  });
+};
+
 function Queries() {
-  const [appliedFilters, setAppliedFilters] = useState<Set<string>>(
-    new Set(["Demographics", "Details", "Date", "TestDetails"]),
-  );
+  const { filters } = useFilters();
   const [currentPage, setCurrentPage] = useState(1);
+
+  console.log(filters);
 
   const alwaysVisibleColumns = ["Patient ID", "Patient Name", "Test Name"];
   const columnFilters = {
-    Demographics: appliedFilters.has("Demographics"),
-    Details: appliedFilters.has("Details"),
-    Date: appliedFilters.has("Date"),
-    TestDetails: appliedFilters.has("TestDetails"),
+    Demographics: true,
+    Details:
+      filters.minAge ||
+      filters.maxAge ||
+      filters.minWeight ||
+      filters.maxWeight ||
+      filters.minHeight ||
+      filters.maxHeight,
+    Date: filters.fromDate || filters.toDate,
+    TestDetails: true
+  };
+
+  const [appliedFilters, setAppliedFilters] = useState<Set<string>>(
+    new Set(["Demographics", "Details", "Date", "TestDetails"])
+  );
+
+  const finalColumnFilters = {
+    Demographics:
+      columnFilters.Demographics && appliedFilters.has("Demographics"),
+    Details: columnFilters.Details && appliedFilters.has("Details"),
+    Date: columnFilters.Date && appliedFilters.has("Date"),
+    TestDetails: columnFilters.TestDetails && appliedFilters.has("TestDetails")
   };
 
   const columnsToDisplay = [
     ...alwaysVisibleColumns,
-    ...Object.keys(columnFilters).filter(
-      (column) => columnFilters[column as keyof typeof columnFilters],
-    ),
+    ...Object.keys(finalColumnFilters).filter(
+      column => columnFilters[column as keyof typeof columnFilters]
+    )
   ];
 
-  const totalPages = Math.ceil(patients.length / ITEMS_PER_PAGE);
+  const filteredPatients = filterPatients(patients, filters);
+
+  const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
   const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedPatients = patients.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  const paginatedPatients = filteredPatients.slice(
+    startIdx,
+    startIdx + ITEMS_PER_PAGE
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -102,7 +153,7 @@ function Queries() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {paginatedPatients.map((patient) => (
+              {paginatedPatients.map(patient => (
                 <TableRow key={patient["Patient ID"]}>
                   {columnsToDisplay.includes("Patient ID") && (
                     <TableCell>{patient["Patient ID"]}</TableCell>

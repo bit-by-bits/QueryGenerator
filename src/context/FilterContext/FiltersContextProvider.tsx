@@ -1,6 +1,6 @@
 import { createContext, useState, ReactNode } from "react";
 
-interface Filters {
+export interface Filters {
   testName: string;
   minAge: number;
   maxAge: number;
@@ -21,7 +21,7 @@ interface FiltersContextType {
 }
 
 export const FiltersContext = createContext<FiltersContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export const FiltersProvider = ({ children }: { children: ReactNode }) => {
@@ -33,16 +33,16 @@ export const FiltersProvider = ({ children }: { children: ReactNode }) => {
     maxWeight: 120,
     minHeight: 150,
     maxHeight: 200,
-    fromDate: "2022-01-01",
-    toDate: "2022-12-31",
+    fromDate: "2020-01-01",
+    toDate: "2024-12-31",
     gender: "",
-    state: "",
+    state: ""
   });
 
   const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
-    setFilters((prevFilters) => ({
+    setFilters(prevFilters => ({
       ...prevFilters,
-      [key]: value,
+      [key]: value
     }));
   };
 
@@ -55,10 +55,10 @@ export const FiltersProvider = ({ children }: { children: ReactNode }) => {
       maxWeight: 120,
       minHeight: 150,
       maxHeight: 200,
-      fromDate: "2022-01-01",
-      toDate: "2022-12-31",
+      fromDate: "2020-01-01",
+      toDate: "2024-12-31",
       gender: "",
-      state: "",
+      state: ""
     });
   };
 

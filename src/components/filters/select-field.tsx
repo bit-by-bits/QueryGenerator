@@ -3,7 +3,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
@@ -22,7 +22,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   placeholder,
   options,
   value,
-  onChange,
+  onChange
 }) => {
   return (
     <div className="grid gap-3">
@@ -32,7 +32,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {options.map((option) => (
+          {options.map(option => (
             <SelectItem key={option} value={option}>
               {option}
             </SelectItem>

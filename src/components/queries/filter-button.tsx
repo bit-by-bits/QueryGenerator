@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { ListFilter } from "lucide-react";
@@ -16,11 +16,11 @@ interface FilterButtonProps {
 
 const FilterButton: React.FC<FilterButtonProps> = ({ onFilterChange }) => {
   const [filters, setFilters] = useState<Set<string>>(
-    new Set(["Demographics", "Details", "Date", "TestDetails"]),
+    new Set(["Demographics", "Details", "Date", "TestDetails"])
   );
 
   const handleFilterChange = (filter: string, checked: boolean) => {
-    setFilters((prevFilters) => {
+    setFilters(prevFilters => {
       const newFilters = new Set(prevFilters);
       if (checked) {
         newFilters.add(filter);
@@ -36,7 +36,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterChange }) => {
     { label: "Demographics", value: "Demographics" },
     { label: "Details", value: "Details" },
     { label: "Test Date", value: "Date" },
-    { label: "Test Details", value: "TestDetails" },
+    { label: "Test Details", value: "TestDetails" }
   ];
 
   return (
@@ -56,7 +56,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterChange }) => {
           <DropdownMenuCheckboxItem
             key={value}
             checked={filters.has(value)}
-            onCheckedChange={(checked) => handleFilterChange(value, checked)}
+            onCheckedChange={checked => handleFilterChange(value, checked)}
           >
             {label}
           </DropdownMenuCheckboxItem>

@@ -5,7 +5,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-  PaginationEllipsis,
+  PaginationEllipsis
 } from "@/components/ui/pagination";
 
 interface TablePaginationProps {
@@ -17,7 +17,7 @@ interface TablePaginationProps {
 const TablePagination: React.FC<TablePaginationProps> = ({
   currentPage,
   totalPages,
-  handlePageChange,
+  handlePageChange
 }) => {
   const handleDisabledClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -94,7 +94,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
                 {page}
               </PaginationLink>
             </PaginationItem>
-          ),
+          )
         )}
         <PaginationItem>
           <PaginationNext

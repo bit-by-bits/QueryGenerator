@@ -4,7 +4,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 
 interface FilterCardProps {
@@ -16,7 +16,7 @@ interface FilterCardProps {
 const FilterCard: React.FC<FilterCardProps> = ({
   title,
   description,
-  children,
+  children
 }) => {
   return (
     <Card>

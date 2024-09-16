@@ -4,7 +4,7 @@ import {
   TableBody,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "@/components/ui/table";
 import tests from "@/data/tests.json";
 import genders from "@/data/genders.json";
@@ -30,7 +30,28 @@ function Filters() {
   };
 
   const handleCopyApiUrl = () => {
-    console.log("Copying API URL to clipboard");
+    const baseUrl = "localhost:5173/api/queries";
+
+    const queryParams = new URLSearchParams({
+      testName: filters?.testName || "",
+      minAge: filters?.minAge.toString(),
+      maxAge: filters?.maxAge.toString(),
+      minWeight: filters?.minWeight.toString(),
+      maxWeight: filters?.maxWeight.toString(),
+      minHeight: filters?.minHeight.toString(),
+      maxHeight: filters?.maxHeight.toString(),
+      fromDate: filters?.fromDate,
+      toDate: filters?.toDate,
+      gender: filters?.gender || "",
+      state: filters?.state || ""
+    });
+
+    const apiUrl = `${baseUrl}?${queryParams.toString()}`;
+
+    navigator.clipboard
+      .writeText(apiUrl)
+      .then(() => console.log("API URL copied to clipboard:", apiUrl))
+      .catch(err => console.error("Failed to copy API URL:", err));
   };
 
   return (
@@ -61,7 +82,7 @@ function Filters() {
               placeholder="Select test name"
               options={tests}
               value={filters.testName}
-              onChange={(value) => setFilter("testName", value)}
+              onChange={value => setFilter("testName", value)}
             />
           </FilterCard>
 
@@ -83,24 +104,24 @@ function Filters() {
                   idPrefix="age"
                   minValue={filters.minAge}
                   maxValue={filters.maxAge}
-                  onMinChange={(value) => setFilter("minAge", value)}
-                  onMaxChange={(value) => setFilter("maxAge", value)}
+                  onMinChange={value => setFilter("minAge", value)}
+                  onMaxChange={value => setFilter("maxAge", value)}
                 />
                 <MinMaxInput
                   label="Weight"
                   idPrefix="weight"
                   minValue={filters.minWeight}
                   maxValue={filters.maxWeight}
-                  onMinChange={(value) => setFilter("minWeight", value)}
-                  onMaxChange={(value) => setFilter("maxWeight", value)}
+                  onMinChange={value => setFilter("minWeight", value)}
+                  onMaxChange={value => setFilter("maxWeight", value)}
                 />
                 <MinMaxInput
                   label="Height"
                   idPrefix="height"
                   minValue={filters.minHeight}
                   maxValue={filters.maxHeight}
-                  onMinChange={(value) => setFilter("minHeight", value)}
-                  onMaxChange={(value) => setFilter("maxHeight", value)}
+                  onMinChange={value => setFilter("minHeight", value)}
+                  onMaxChange={value => setFilter("maxHeight", value)}
                 />
               </TableBody>
             </Table>
@@ -115,13 +136,13 @@ function Filters() {
                 id="from"
                 label="From Date"
                 value={filters.fromDate}
-                onChange={(value) => setFilter("fromDate", value)}
+                onChange={value => setFilter("fromDate", value)}
               />
               <DateInput
                 id="to"
                 label="To Date"
                 value={filters.toDate}
-                onChange={(value) => setFilter("toDate", value)}
+                onChange={value => setFilter("toDate", value)}
               />
             </div>
           </FilterCard>
@@ -139,7 +160,7 @@ function Filters() {
                 placeholder="Select gender"
                 options={genders}
                 value={filters.gender}
-                onChange={(value) => setFilter("gender", value)}
+                onChange={value => setFilter("gender", value)}
               />
               <SelectField
                 id="state"
@@ -147,7 +168,7 @@ function Filters() {
                 placeholder="Select state"
                 options={states}
                 value={filters.state}
-                onChange={(value) => setFilter("state", value)}
+                onChange={value => setFilter("state", value)}
               />
             </div>
           </FilterCard>

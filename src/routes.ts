@@ -7,5 +7,5 @@ export const URLs = {
   app: "/app",
   filters: "/app/filters",
   queries: "/app/queries",
-  inspect: "/app/inspect",
+  inspect: "/app/inspect"
 };

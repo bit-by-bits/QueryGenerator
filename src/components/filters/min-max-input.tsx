@@ -17,7 +17,7 @@ const MinMaxInput: React.FC<MinMaxInputProps> = ({
   minValue,
   maxValue,
   onMinChange,
-  onMaxChange,
+  onMaxChange
 }) => {
   return (
     <TableRow>
@@ -30,7 +30,7 @@ const MinMaxInput: React.FC<MinMaxInputProps> = ({
           id={`min-${idPrefix}`}
           type="number"
           value={minValue}
-          onChange={(e) => onMinChange(parseFloat(e.target.value))}
+          onChange={e => onMinChange(parseFloat(e.target.value))}
         />
       </TableCell>
       <TableCell>
@@ -41,7 +41,7 @@ const MinMaxInput: React.FC<MinMaxInputProps> = ({
           id={`max-${idPrefix}`}
           type="number"
           value={maxValue}
-          onChange={(e) => onMaxChange(parseFloat(e.target.value))}
+          onChange={e => onMaxChange(parseFloat(e.target.value))}
         />
       </TableCell>
     </TableRow>

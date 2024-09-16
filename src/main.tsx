@@ -22,21 +22,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: URLs.login,
-        element: <Login />,
+        element: <Login />
       },
       {
         path: URLs.forgotPassword,
-        element: <UnavailablePage />,
+        element: <UnavailablePage />
       },
       {
         path: URLs.google,
-        element: <UnavailablePage />,
+        element: <UnavailablePage />
       },
       {
         path: URLs.signUp,
-        element: <UnavailablePage />,
-      },
-    ],
+        element: <UnavailablePage />
+      }
+    ]
   },
   {
     path: URLs.app,
@@ -45,18 +45,18 @@ const router = createBrowserRouter([
     children: [
       {
         path: URLs.filters,
-        element: <Filters />,
+        element: <Filters />
       },
       {
         path: URLs.queries,
-        element: <Queries />,
+        element: <Queries />
       },
       {
         path: URLs.inspect,
-        element: <UnavailablePage />,
-      },
-    ],
-  },
+        element: <UnavailablePage />
+      }
+    ]
+  }
 ]);
 
 const rootElement = document.getElementById("root");
@@ -69,6 +69,6 @@ if (rootElement) {
           <RouterProvider router={router} />
         </FiltersProvider>
       </AuthProvider>
-    </StrictMode>,
+    </StrictMode>
   );
 }

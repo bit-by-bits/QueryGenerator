@@ -12,10 +12,10 @@ export const description =
 const navLinks = [
   {
     path: URLs.filters,
-    label: "Filters",
+    label: "Filters"
   },
   { path: URLs.queries, label: "Queries" },
-  { path: URLs.inspect, label: "Inspect" },
+  { path: URLs.inspect, label: "Inspect" }
 ];
 
 const AppLayout = () => {

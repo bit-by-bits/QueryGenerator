@@ -12,7 +12,7 @@ const DateInput: React.FC<DateInputProps> = ({
   id,
   label,
   value,
-  onChange,
+  onChange
 }) => {
   return (
     <div className="grid gap-3">
@@ -21,7 +21,7 @@ const DateInput: React.FC<DateInputProps> = ({
         id={id}
         type="date"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
       />
     </div>
   );
