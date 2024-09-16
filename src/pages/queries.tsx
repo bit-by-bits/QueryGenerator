@@ -20,84 +20,22 @@ import FilterButton from "@/components/queries/filter-button";
 import ExportButton from "@/components/queries/export-button";
 import ModifyFiltersButton from "@/components/queries/modify-filters-button";
 import TablePagination from "@/components/queries/table-pagination";
-import { Filters } from "@/context/FilterContext/FiltersContextProvider";
 import { useFilters } from "@/context/FilterContext/FiltersContextUser";
-
-// Pagination constants
-const ITEMS_PER_PAGE = 10;
-
-const filterPatients = (patients: any[], filters: Filters) => {
-  return patients.filter(patient => {
-    const patientAge = patient["Patient Age"];
-    const patientWeight = patient["Patient Weight"];
-    const patientHeight = patient["Patient Height"];
-    const testDate = new Date(patient["Test Date"]);
-
-    const from = new Date(filters.fromDate);
-    const to = new Date(filters.toDate);
-
-    return (
-      (!filters.testName || patient["Test Name"].includes(filters.testName)) &&
-      filters.minAge <= patientAge &&
-      patientAge <= filters.maxAge &&
-      filters.minWeight <= patientWeight &&
-      patientWeight <= filters.maxWeight &&
-      filters.minHeight <= patientHeight &&
-      patientHeight <= filters.maxHeight &&
-      from <= testDate &&
-      testDate <= to &&
-      (!filters.gender || patient["Patient Gender"] === filters.gender) &&
-      (!filters.state || patient["Patient State"] === filters.state)
-    );
-  });
-};
+import { filterColumns, filterPatients } from "@/components/queries/filters";
 
 function Queries() {
   const { filters } = useFilters();
   const [currentPage, setCurrentPage] = useState(1);
-
-  console.log(filters);
-
-  const alwaysVisibleColumns = ["Patient ID", "Patient Name", "Test Name"];
-  const columnFilters = {
-    Demographics: true,
-    Details:
-      filters.minAge ||
-      filters.maxAge ||
-      filters.minWeight ||
-      filters.maxWeight ||
-      filters.minHeight ||
-      filters.maxHeight,
-    Date: filters.fromDate || filters.toDate,
-    TestDetails: true
-  };
-
   const [appliedFilters, setAppliedFilters] = useState<Set<string>>(
     new Set(["Demographics", "Details", "Date", "TestDetails"])
   );
 
-  const finalColumnFilters = {
-    Demographics:
-      columnFilters.Demographics && appliedFilters.has("Demographics"),
-    Details: columnFilters.Details && appliedFilters.has("Details"),
-    Date: columnFilters.Date && appliedFilters.has("Date"),
-    TestDetails: columnFilters.TestDetails && appliedFilters.has("TestDetails")
-  };
-
-  const columnsToDisplay = [
-    ...alwaysVisibleColumns,
-    ...Object.keys(finalColumnFilters).filter(
-      column => columnFilters[column as keyof typeof columnFilters]
-    )
-  ];
-
   const filteredPatients = filterPatients(patients, filters);
+  const filteredColumns = filterColumns(appliedFilters, filters);
 
-  const totalPages = Math.ceil(filteredPatients.length / ITEMS_PER_PAGE);
-  const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedPatients = filteredPatients.slice(
-    startIdx,
-    startIdx + ITEMS_PER_PAGE
+    (currentPage - 1) * 10,
+    (currentPage - 1) * 10 + 10
   );
 
   const handlePageChange = (page: number) => {
@@ -129,25 +67,25 @@ function Queries() {
           <Table>
             <TableHeader>
               <TableRow>
-                {columnsToDisplay.includes("Patient ID") && (
+                {filteredColumns.includes("Patient ID") && (
                   <TableHead>ID</TableHead>
                 )}
-                {columnsToDisplay.includes("Patient Name") && (
+                {filteredColumns.includes("Patient Name") && (
                   <TableHead>Name</TableHead>
                 )}
-                {columnsToDisplay.includes("Demographics") && (
+                {filteredColumns.includes("Demographics") && (
                   <TableHead>Demographics</TableHead>
                 )}
-                {columnsToDisplay.includes("Test Name") && (
+                {filteredColumns.includes("Test Name") && (
                   <TableHead>Test Name</TableHead>
                 )}
-                {columnsToDisplay.includes("Details") && (
+                {filteredColumns.includes("Details") && (
                   <TableHead>Details</TableHead>
                 )}
-                {columnsToDisplay.includes("Date") && (
+                {filteredColumns.includes("Date") && (
                   <TableHead>Date</TableHead>
                 )}
-                {columnsToDisplay.includes("TestDetails") && (
+                {filteredColumns.includes("TestDetails") && (
                   <TableHead>Test Details</TableHead>
                 )}
               </TableRow>
@@ -155,36 +93,36 @@ function Queries() {
             <TableBody>
               {paginatedPatients.map(patient => (
                 <TableRow key={patient["Patient ID"]}>
-                  {columnsToDisplay.includes("Patient ID") && (
+                  {filteredColumns.includes("Patient ID") && (
                     <TableCell>{patient["Patient ID"]}</TableCell>
                   )}
-                  {columnsToDisplay.includes("Patient Name") && (
+                  {filteredColumns.includes("Patient Name") && (
                     <TableCell className="font-medium">
                       {patient["Patient Name"]}
                     </TableCell>
                   )}
-                  {columnsToDisplay.includes("Demographics") && (
+                  {filteredColumns.includes("Demographics") && (
                     <TableCell className="flex flex-col gap-1">
                       <span>{`Gender: ${patient["Patient Gender"]}`}</span>
                       <span>{`State: ${patient["Patient State"]}`}</span>
                     </TableCell>
                   )}
-                  {columnsToDisplay.includes("Test Name") && (
+                  {filteredColumns.includes("Test Name") && (
                     <TableCell className="font-medium">
                       {patient["Test Name"]}
                     </TableCell>
                   )}
-                  {columnsToDisplay.includes("Details") && (
+                  {filteredColumns.includes("Details") && (
                     <TableCell className="flex flex-col gap-1">
                       <span>{`Age: ${patient["Patient Age"]} yrs`}</span>
                       <span>{`Height: ${patient["Patient Height"]} m`}</span>
                       <span>{`Weight: ${patient["Patient Weight"]} kgs`}</span>
                     </TableCell>
                   )}
-                  {columnsToDisplay.includes("Date") && (
+                  {filteredColumns.includes("Date") && (
                     <TableCell>{patient["Test Date"]}</TableCell>
                   )}
-                  {columnsToDisplay.includes("TestDetails") && (
+                  {filteredColumns.includes("TestDetails") && (
                     <TableCell className="flex flex-col gap-1">
                       <span>{`Value: ${patient["Test Value"]} ${patient["Test Unit"]}`}</span>
                       <span>{`Severity: ${patient["Severity"]}`}</span>
@@ -199,7 +137,7 @@ function Queries() {
         <CardFooter>
           <TablePagination
             currentPage={currentPage}
-            totalPages={totalPages}
+            totalPages={Math.ceil(filteredPatients.length / 10)}
             handlePageChange={handlePageChange}
           />
         </CardFooter>

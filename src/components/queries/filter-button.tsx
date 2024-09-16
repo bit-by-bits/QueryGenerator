@@ -22,11 +22,10 @@ const FilterButton: React.FC<FilterButtonProps> = ({ onFilterChange }) => {
   const handleFilterChange = (filter: string, checked: boolean) => {
     setFilters(prevFilters => {
       const newFilters = new Set(prevFilters);
-      if (checked) {
-        newFilters.add(filter);
-      } else {
-        newFilters.delete(filter);
-      }
+
+      if (checked) newFilters.add(filter);
+      else newFilters.delete(filter);
+
       onFilterChange(newFilters);
       return newFilters;
     });
