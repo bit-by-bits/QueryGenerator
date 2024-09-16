@@ -26,40 +26,46 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   const getPages = () => {
     const pages = [];
     const maxPagesToShow = 5;
-    const range = Math.min(totalPages, maxPagesToShow);
+    const halfRange = Math.floor(maxPagesToShow / 2);
 
-    if (totalPages <= range) {
+    if (totalPages <= maxPagesToShow) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      if (currentPage <= Math.floor(range / 2)) {
-        for (let i = 1; i <= range - 2; i++) {
+      if (currentPage <= halfRange) {
+        for (let i = 1; i <= maxPagesToShow - 2; i++) {
           pages.push(i);
         }
-        pages.push(null);
+        pages.push(null); // Ellipsis
         pages.push(totalPages);
-      } else if (currentPage >= totalPages - Math.floor(range / 2)) {
+      } else if (currentPage >= totalPages - halfRange) {
         pages.push(1);
-        pages.push(null);
-        for (let i = totalPages - (range - 2); i <= totalPages; i++) {
+        pages.push(null); // Ellipsis
+        for (let i = totalPages - (maxPagesToShow - 2); i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         pages.push(1);
-        pages.push(null);
+        pages.push(null); // Ellipsis
         for (
-          let i = currentPage - Math.floor(range / 2) + 1;
-          i <= currentPage + Math.floor(range / 2) - 1;
+          let i = currentPage - halfRange + 1;
+          i <= currentPage + halfRange - 1;
           i++
         ) {
           pages.push(i);
         }
-        pages.push(null);
+        pages.push(null); // Ellipsis
         pages.push(totalPages);
       }
     }
-    return pages;
+
+    console.log(pages);
+
+    // Remove duplicate entries
+    return pages.filter(
+      (item, index, arr) => !(item === null && arr[index - 1] === null)
+    );
   };
 
   const pages = getPages();
@@ -85,7 +91,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
               <PaginationEllipsis />
             </PaginationItem>
           ) : (
-            <PaginationItem key={page}>
+            <PaginationItem key={idx}>
               <PaginationLink
                 onClick={() => handlePageChange(page)}
                 isActive={currentPage === page}

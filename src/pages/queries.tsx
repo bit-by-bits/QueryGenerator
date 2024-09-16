@@ -23,6 +23,9 @@ import TablePagination from "@/components/queries/table-pagination";
 import { useFilters } from "@/context/FilterContext/FiltersContextUser";
 import { filterColumns, filterPatients } from "@/components/queries/filters";
 
+export const description =
+  "Queries page for the Query Generator app. Displays queried data based on the filters applied.";
+
 function Queries() {
   const { filters } = useFilters();
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +46,7 @@ function Queries() {
   };
 
   return (
-    <div className="grid flex-1 items-start gap-4 md:gap-8">
+    <div className="grid flex-1 items-start gap-4">
       <div className="flex items-center">
         <div className="hidden items-center gap-2 md:ml-auto md:flex w-full">
           <h1 className="flex-1 text-xl font-semibold tracking-tight">

@@ -15,6 +15,7 @@ const navLinks = [
     label: "Filters"
   },
   { path: URLs.queries, label: "Queries" },
+  { path: URLs.illustrations, label: "Illustrations" },
   { path: URLs.inspect, label: "Inspect" }
 ];
 

@@ -5,14 +5,15 @@ import "./index.css";
 import LoginImg from "./assets/login.jpeg";
 import { URLs } from "./routes";
 import { AuthProvider } from "./context/AuthContext/AuthContextProvider";
+import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
 import AppLayout from "./layouts/app";
 import AuthLayout from "./layouts/auth";
 import Filters from "./pages/filters";
 import ErrorPage from "./pages/error";
 import UnavailablePage from "./pages/unavailabe";
 import Login from "./pages/login";
-import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
 import Queries from "./pages/queries";
+import Illustrations from "./pages/illustrations";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,17 @@ const router = createBrowserRouter([
         path: URLs.queries,
         element: <Queries />
       },
+      {
+        path: URLs.illustrations,
+        element: <Illustrations />
+      }
+    ]
+  },
+  {
+    path: URLs.api,
+    element: <AppLayout />,
+    errorElement: <ErrorPage />,
+    children: [
       {
         path: URLs.inspect,
         element: <UnavailablePage />
