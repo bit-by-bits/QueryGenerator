@@ -1,5 +1,23 @@
 import { createContext, useState, ReactNode } from "react";
 
+export interface Patient {
+  "Patient ID": number;
+  "Patient Name": string;
+  "Patient Age": number;
+  "Patient Gender": string;
+  "Patient Height": number;
+  "Patient Weight": number;
+  "Patient State": string;
+  "Test Name": string;
+  "Test Value": number | string;
+  "Test Unit": string;
+  "Test Date": string;
+  "Test Time": string;
+  Severity: string;
+  Diagnosis: string;
+  Treatment: string;
+}
+
 export interface Filters {
   testName: string;
   minAge: number;

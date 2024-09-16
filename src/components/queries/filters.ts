@@ -1,7 +1,9 @@
-import { Filters } from "@/context/FilterContext/FiltersContextProvider";
+import {
+  Filters,
+  Patient
+} from "@/context/FilterContext/FiltersContextProvider";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const filterPatients = (patients: any[], filters: Filters) => {
+const filterPatients = (patients: Patient[], filters: Filters) => {
   return patients.filter(patient => {
     const patientAge = patient["Patient Age"];
     const patientWeight = patient["Patient Weight"];
