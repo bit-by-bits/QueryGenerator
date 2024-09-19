@@ -91,7 +91,7 @@ const HealthyResultsCard: React.FC<HealthyResultsCardProps> = ({
           <span className="text-sm font-normal text-muted-foreground">
             {type === "month"
               ? `${patientLabel} this month`
-              : `${patientLabel} for last test`}
+              : `${patientLabel} in last test`}
           </span>
         </div>
         <ChartContainer

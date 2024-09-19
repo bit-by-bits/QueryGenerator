@@ -5,7 +5,8 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent
+  CardContent,
+  CardFooter
 } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -13,6 +14,7 @@ import {
   ChartTooltipContent
 } from "@/components/ui/chart";
 import { Patient } from "@/context/FilterContext/FiltersContextProvider";
+import { Separator } from "../ui/separator";
 
 interface MonthlyTestsCardProps {
   patients: Patient[];
@@ -39,6 +41,7 @@ const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
     (acc, data) => (data.tests > acc.tests ? data : acc),
     { month: "", tests: 0 }
   ).month;
+  const topMonths = monthlyData.sort((a, b) => b.tests - a.tests).slice(0, 3);
 
   return (
     <Card className="max-w-xs" x-chunk="charts-01-chunk-7">
@@ -102,6 +105,29 @@ const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
           </AreaChart>
         </ChartContainer>
       </CardContent>
+
+      <CardFooter className="flex flex-row border-t p-4">
+        <div className="flex w-full items-center gap-2">
+          {topMonths.map((monthData, index) => (
+            <React.Fragment key={index}>
+              <div className="grid flex-1 auto-rows-min gap-0.5">
+                <div className="text-xs text-muted-foreground">
+                  {monthData.month}
+                </div>
+                <div className="flex items-baseline text-2xl font-bold tabular-nums leading-none">
+                  {monthData.tests}
+                  <span className="text-sm font-normal text-muted-foreground ml-1">
+                    Tests
+                  </span>
+                </div>
+              </div>
+              {index < 2 && (
+                <Separator orientation="vertical" className="mx-2 h-10 w-px" />
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </CardFooter>
     </Card>
   );
 };

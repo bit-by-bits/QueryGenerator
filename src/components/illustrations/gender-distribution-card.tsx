@@ -14,19 +14,32 @@ interface GenderDistributionCardProps {
   patients: Patient[];
 }
 
+interface GenderCounts {
+  [key: string]: { total: number; healthy: number };
+}
+
 const getGenderDistribution = (patients: Patient[]) => {
-  const genderCounts = patients.reduce(
+  const genderCounts: GenderCounts = patients.reduce(
     (acc, patient) => {
       const gender = patient["Patient Gender"];
-      acc[gender] = (acc[gender] || 0) + 1;
+      const isHealthy = patient.Severity === "Normal" || !patient.Severity;
+      acc[gender] = acc[gender] || { total: 0, healthy: 0 };
+      acc[gender].total += 1;
+      if (isHealthy) acc[gender].healthy += 1;
       return acc;
     },
-    { Male: 0, Female: 0, Other: 0 } as { [key: string]: number }
+    {
+      Male: { total: 0, healthy: 0 },
+      Female: { total: 0, healthy: 0 },
+      Other: { total: 0, healthy: 0 }
+    } as GenderCounts
   );
 
-  return Object.entries(genderCounts).map(([gender, count]) => ({
+  return Object.entries(genderCounts).map(([gender, data]) => ({
     gender,
-    count
+    total: data.total,
+    healthy: data.healthy,
+    percentageHealthy: (data.healthy / data.total) * 100 || 0
   }));
 };
 
@@ -35,79 +48,75 @@ const GenderDistributionCard: React.FC<GenderDistributionCardProps> = ({
 }) => {
   const genderData = getGenderDistribution(patients);
   const genderWithHighestCount = genderData.reduce((acc, data) =>
-    data.count > acc.count ? data : acc
+    data.total > acc.total ? data : acc
   ).gender;
 
   return (
-    <Card className="lg:max-w-md" x-chunk="charts-01-chunk-4">
-      <CardHeader className="space-y-0 pb-2">
-        <CardDescription>Gender Distribution</CardDescription>
-        <CardTitle className="text-4xl">
-          {genderWithHighestCount}
-          <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground ml-1">
-            patients are more
-          </span>
-        </CardTitle>
+    <Card className="max-w-xs">
+      <CardHeader>
+        <CardTitle>Gender Distribution</CardTitle>
+        <CardDescription>
+          {genderWithHighestCount} patients are the most common
+        </CardDescription>
       </CardHeader>
-
-      <CardContent className="flex gap-4 p-4 pb-2">
-        <ChartContainer
-          config={{
-            male: {
-              label: "Male",
-              color: "hsl(var(--chart-1))"
-            },
-            female: {
-              label: "Female",
-              color: "hsl(var(--chart-2))"
-            },
-            other: {
-              label: "Other",
-              color: "hsl(var(--chart-3))"
-            }
-          }}
-          className="h-[140px] w-full"
-        >
-          <BarChart
-            margin={{
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 10
-            }}
-            data={genderData.map(item => ({
-              ...item,
-              fill:
-                item.gender === "Male"
-                  ? "var(--color-male)"
-                  : item.gender === "Female"
-                    ? "var(--color-female)"
-                    : "var(--color-other)"
-            }))}
-            layout="vertical"
-            barSize={32}
-            barGap={2}
-          >
-            <XAxis type="number" dataKey="count" hide />
-            <YAxis
-              dataKey="gender"
-              type="category"
-              tickLine={false}
-              tickMargin={4}
-              axisLine={false}
-              className="capitalize"
-            />
-            <Bar dataKey="count" radius={5}>
-              <LabelList
-                position="insideLeft"
-                dataKey="count"
-                fill="white"
-                offset={8}
-                fontSize={12}
-              />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+      <CardContent className="grid gap-4">
+        {genderData.map(genderInfo => (
+          <div key={genderInfo.gender} className="grid auto-rows-min gap-2">
+            <div className="flex items-baseline gap-1 text-2xl font-bold tabular-nums leading-none">
+              {`${genderInfo.percentageHealthy.toFixed(1)}%`}
+              <span className="text-sm font-normal text-muted-foreground">
+                {` ${genderInfo.gender.toLowerCase()}s are healthy`}
+              </span>
+            </div>
+            <ChartContainer
+              config={{
+                [genderInfo.gender.toLowerCase()]: {
+                  label: genderInfo.gender,
+                  color: `hsl(var(--chart-${genderInfo.gender === "Male" ? 1 : genderInfo.gender === "Female" ? 2 : 3}))`
+                }
+              }}
+              className="aspect-auto h-[32px] w-full"
+            >
+              <BarChart
+                accessibilityLayer
+                layout="vertical"
+                margin={{
+                  left: 0,
+                  top: 0,
+                  right: 0,
+                  bottom: 0
+                }}
+                data={[
+                  {
+                    gender: genderInfo.gender,
+                    percentageHealthy: genderInfo.percentageHealthy,
+                    healthy: genderInfo.healthy
+                  }
+                ]}
+              >
+                <Bar
+                  dataKey="percentageHealthy"
+                  fill={`var(--color-${genderInfo.gender.toLowerCase()})`}
+                  radius={4}
+                  barSize={32}
+                >
+                  <LabelList
+                    position="insideLeft"
+                    dataKey="healthy"
+                    offset={8}
+                    fontSize={12}
+                    fill="white"
+                    formatter={(value: number) =>
+                      `${value} out of ${genderInfo.total} patients`
+                    }
+                  />
+                </Bar>
+                <YAxis dataKey="gender" type="category" tickCount={1} hide />
+                <XAxis dataKey="percentageHealthy" type="number" hide />
+              </BarChart>
+            </ChartContainer>
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
