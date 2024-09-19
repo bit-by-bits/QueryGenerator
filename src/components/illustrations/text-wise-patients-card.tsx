@@ -18,19 +18,24 @@ interface TestWisePatientsCardProps {
   patients: Patient[];
 }
 
-const getTestWisePatientData = (data: Patient[]) => {
+interface TestWiseData {
+  test: string;
+  patients: number;
+}
+
+const getTestWisePatientData = (data: Patient[]): TestWiseData[] => {
   const testCounts = data.reduce(
     (acc, patient) => {
       const testName = patient["Test Name"];
       acc[testName] = (acc[testName] || 0) + 1;
       return acc;
     },
-    {} as { [key: string]: number }
+    {} as Record<string, number>
   );
 
-  return Object.keys(testCounts).map(test => ({
+  return Object.entries(testCounts).map(([test, count]) => ({
     test,
-    patients: testCounts[test]
+    patients: count
   }));
 };
 
@@ -38,12 +43,9 @@ const TestWisePatientsCard: React.FC<TestWisePatientsCardProps> = ({
   patients
 }) => {
   const testWiseData = getTestWisePatientData(patients);
-  const testWithHighestPatients = testWiseData.reduce(
-    (acc, data) => (data.patients > acc.patients ? data : acc),
-    {
-      test: "",
-      patients: 0
-    }
+
+  const testWithHighestPatients = testWiseData.reduce((max, data) =>
+    data.patients > max.patients ? data : max
   ).test;
 
   return (
@@ -54,9 +56,7 @@ const TestWisePatientsCard: React.FC<TestWisePatientsCardProps> = ({
           <span className="font-semibold text-foreground">Test</span>
         </CardDescription>
         <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums flex-wrap">
-          {testWithHighestPatients.split(" ").pop() === "Test"
-            ? testWithHighestPatients.split(" ").slice(0, -1).join(" ")
-            : testWithHighestPatients}
+          {testWithHighestPatients.split(" ").slice(0, -1).join(" ")}
           <span className="text-sm font-normal tracking-normal text-muted-foreground">
             Test has the highest patients
           </span>
@@ -75,8 +75,6 @@ const TestWisePatientsCard: React.FC<TestWisePatientsCardProps> = ({
             data={testWiseData}
             margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
           >
-            <XAxis dataKey="test" hide />
-            <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
             <defs>
               <linearGradient id="fillTests" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -91,6 +89,8 @@ const TestWisePatientsCard: React.FC<TestWisePatientsCardProps> = ({
                 />
               </linearGradient>
             </defs>
+            <XAxis dataKey="test" hide />
+            <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
             <Area
               dataKey="patients"
               type="natural"

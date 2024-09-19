@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, FC } from "react";
 import {
   Card,
   CardContent,
@@ -13,20 +13,14 @@ interface FilterCardProps {
   children: ReactNode;
 }
 
-const FilterCard: React.FC<FilterCardProps> = ({
-  title,
-  description,
-  children
-}) => {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
-  );
-};
+const FilterCard: FC<FilterCardProps> = ({ title, description, children }) => (
+  <Card>
+    <CardHeader>
+      <CardTitle>{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+    </CardHeader>
+    <CardContent>{children}</CardContent>
+  </Card>
+);
 
 export default FilterCard;

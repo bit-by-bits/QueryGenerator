@@ -1,3 +1,4 @@
+import React from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
@@ -18,8 +19,8 @@ const FormField: React.FC<FormFieldProps> = ({
   label,
   value,
   onChange,
-  placeholder,
-  required,
+  placeholder = "",
+  required = false,
   extra
 }) => (
   <div className="space-y-2">

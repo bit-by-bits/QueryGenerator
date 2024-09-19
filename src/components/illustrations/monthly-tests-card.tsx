@@ -20,15 +20,19 @@ interface MonthlyTestsCardProps {
   patients: Patient[];
 }
 
-const getMonthlyTestData = (data: Patient[]) => {
+interface MonthlyData {
+  month: string;
+  tests: number;
+}
+
+const getMonthlyTestData = (data: Patient[]): MonthlyData[] => {
   const monthlyCounts = Array.from({ length: 12 }, (_, i) => ({
     month: new Date(0, i).toLocaleString("default", { month: "short" }),
     tests: 0
   }));
 
   data.forEach(patient => {
-    const testDate = new Date(patient["Test Date"]);
-    const month = testDate.getMonth();
+    const month = new Date(patient["Test Date"]).getMonth();
     monthlyCounts[month].tests += 1;
   });
 
@@ -37,11 +41,16 @@ const getMonthlyTestData = (data: Patient[]) => {
 
 const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
   const monthlyData = getMonthlyTestData(patients);
+
   const monthWithHighestTests = monthlyData.reduce(
-    (acc, data) => (data.tests > acc.tests ? data : acc),
+    (max, data) => (data.tests > max.tests ? data : max),
     { month: "", tests: 0 }
   ).month;
-  const topMonths = monthlyData.sort((a, b) => b.tests - a.tests).slice(0, 3);
+
+  const topMonths = monthlyData
+    .slice()
+    .sort((a, b) => b.tests - a.tests)
+    .slice(0, 3);
 
   return (
     <Card className="max-w-xs" x-chunk="charts-01-chunk-7">
@@ -59,19 +68,12 @@ const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
       </CardHeader>
       <CardContent className="p-0">
         <ChartContainer
-          config={{
-            tests: {
-              label: "Tests",
-              color: "hsl(var(--chart-2))"
-            }
-          }}
+          config={{ tests: { label: "Tests", color: "hsl(var(--chart-2))" } }}
         >
           <AreaChart
             data={monthlyData}
             margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
           >
-            <XAxis dataKey="month" hide />
-            <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
             <defs>
               <linearGradient id="fillTests" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -86,6 +88,8 @@ const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
                 />
               </linearGradient>
             </defs>
+            <XAxis dataKey="month" hide />
+            <YAxis domain={["dataMin - 5", "dataMax + 5"]} hide />
             <Area
               dataKey="tests"
               type="natural"
@@ -105,11 +109,10 @@ const MonthlyTestsCard: React.FC<MonthlyTestsCardProps> = ({ patients }) => {
           </AreaChart>
         </ChartContainer>
       </CardContent>
-
       <CardFooter className="flex flex-row border-t p-4">
         <div className="flex w-full items-center gap-2">
           {topMonths.map((monthData, index) => (
-            <React.Fragment key={index}>
+            <React.Fragment key={monthData.month}>
               <div className="grid flex-1 auto-rows-min gap-0.5">
                 <div className="text-xs text-muted-foreground">
                   {monthData.month}

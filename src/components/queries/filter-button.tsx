@@ -14,29 +14,32 @@ interface FilterButtonProps {
   onFilterChange: (filters: Set<string>) => void;
 }
 
+const filterOptions = [
+  { label: "Demographics", value: "Demographics" },
+  { label: "Details", value: "Details" },
+  { label: "Test Date", value: "Date" },
+  { label: "Test Details", value: "TestDetails" }
+];
+
 const FilterButton: React.FC<FilterButtonProps> = ({ onFilterChange }) => {
   const [filters, setFilters] = useState<Set<string>>(
-    new Set(["Demographics", "Details", "Date", "TestDetails"])
+    new Set(filterOptions.map(option => option.value))
   );
 
   const handleFilterChange = (filter: string, checked: boolean) => {
     setFilters(prevFilters => {
-      const newFilters = new Set(prevFilters);
+      const updatedFilters = new Set(prevFilters);
 
-      if (checked) newFilters.add(filter);
-      else newFilters.delete(filter);
+      if (checked) {
+        updatedFilters.add(filter);
+      } else {
+        updatedFilters.delete(filter);
+      }
 
-      onFilterChange(newFilters);
-      return newFilters;
+      onFilterChange(updatedFilters);
+      return updatedFilters;
     });
   };
-
-  const filterOptions = [
-    { label: "Demographics", value: "Demographics" },
-    { label: "Details", value: "Details" },
-    { label: "Test Date", value: "Date" },
-    { label: "Test Details", value: "TestDetails" }
-  ];
 
   return (
     <DropdownMenu>

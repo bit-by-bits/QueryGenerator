@@ -4,15 +4,23 @@ interface TableHeadersProps {
   columns: string[];
 }
 
+const columnHeaders: { [key: string]: string } = {
+  "Patient ID": "ID",
+  "Patient Name": "Name",
+  Demographics: "Demographics",
+  "Test Name": "Test Name",
+  Details: "Details",
+  Date: "Date",
+  TestDetails: "Test Details"
+};
+
 const TableHeaders: React.FC<TableHeadersProps> = ({ columns }) => (
   <>
-    {columns.includes("Patient ID") && <TableHead>ID</TableHead>}
-    {columns.includes("Patient Name") && <TableHead>Name</TableHead>}
-    {columns.includes("Demographics") && <TableHead>Demographics</TableHead>}
-    {columns.includes("Test Name") && <TableHead>Test Name</TableHead>}
-    {columns.includes("Details") && <TableHead>Details</TableHead>}
-    {columns.includes("Date") && <TableHead>Date</TableHead>}
-    {columns.includes("TestDetails") && <TableHead>Test Details</TableHead>}
+    {columns.map(column =>
+      columnHeaders[column] ? (
+        <TableHead key={column}>{columnHeaders[column]}</TableHead>
+      ) : null
+    )}
   </>
 );
 

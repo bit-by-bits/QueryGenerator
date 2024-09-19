@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -30,7 +31,17 @@ const Queries = () => {
     new Set(["Demographics", "Details", "Date", "TestDetails"])
   );
 
-  const filteredPatients = filterPatients(patients, filters);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQuery = searchParams.get("search") || "";
+
+  const filteredPatients = filterPatients(
+    patients.filter(patient =>
+      patient["Patient Name"].toLowerCase().includes(searchQuery.toLowerCase())
+    ),
+    filters
+  );
+
   const filteredColumns = filterColumns(appliedFilters, filters);
 
   const paginatedPatients = filteredPatients.slice(

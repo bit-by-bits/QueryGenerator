@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TableCell, TableRow } from "@/components/ui/table";
@@ -11,41 +12,53 @@ interface MinMaxInputProps {
   onMaxChange: (value: number) => void;
 }
 
-const MinMaxInput: React.FC<MinMaxInputProps> = ({
+const MinMaxInput: FC<MinMaxInputProps> = ({
   label,
   idPrefix,
   minValue,
   maxValue,
   onMinChange,
   onMaxChange
-}) => {
-  return (
-    <TableRow>
-      <TableCell className="font-semibold">{label}</TableCell>
-      <TableCell>
-        <Label htmlFor={`min-${idPrefix}`} className="sr-only">
-          Minimum {label}
-        </Label>
-        <Input
-          id={`min-${idPrefix}`}
-          type="number"
-          value={minValue}
-          onChange={e => onMinChange(parseFloat(e.target.value))}
-        />
-      </TableCell>
-      <TableCell>
-        <Label htmlFor={`max-${idPrefix}`} className="sr-only">
-          Maximum {label}
-        </Label>
-        <Input
-          id={`max-${idPrefix}`}
-          type="number"
-          value={maxValue}
-          onChange={e => onMaxChange(parseFloat(e.target.value))}
-        />
-      </TableCell>
-    </TableRow>
-  );
-};
+}) => (
+  <TableRow>
+    <TableCell className="font-semibold">{label}</TableCell>
+    <TableCell>
+      <Label htmlFor={`min-${idPrefix}`} className="sr-only">
+        Minimum {label}
+      </Label>
+      <Input
+        id={`min-${idPrefix}`}
+        type="number"
+        value={minValue}
+        min={0}
+        max={200}
+        onChange={e => {
+          const value = parseFloat(e.target.value);
+          if (value >= 0 && value <= 200) {
+            onMinChange(value);
+          }
+        }}
+      />
+    </TableCell>
+    <TableCell>
+      <Label htmlFor={`max-${idPrefix}`} className="sr-only">
+        Maximum {label}
+      </Label>
+      <Input
+        id={`max-${idPrefix}`}
+        type="number"
+        value={maxValue}
+        min={0}
+        max={200}
+        onChange={e => {
+          const value = parseFloat(e.target.value);
+          if (value >= 0 && value <= 200) {
+            onMaxChange(value);
+          }
+        }}
+      />
+    </TableCell>
+  </TableRow>
+);
 
 export default MinMaxInput;

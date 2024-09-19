@@ -3,59 +3,82 @@ import {
   Patient
 } from "@/context/FilterContext/FiltersContextProvider";
 
-const filterPatients = (patients: Patient[], filters: Filters) => {
+const filterPatients = (patients: Patient[], filters: Filters): Patient[] => {
+  const {
+    minAge,
+    maxAge,
+    minWeight,
+    maxWeight,
+    minHeight,
+    maxHeight,
+    fromDate,
+    toDate,
+    testName,
+    gender,
+    state
+  } = filters;
+  const from = new Date(fromDate);
+  const to = new Date(toDate);
+
   return patients.filter(patient => {
     const patientAge = patient["Patient Age"];
     const patientWeight = patient["Patient Weight"];
     const patientHeight = patient["Patient Height"];
     const testDate = new Date(patient["Test Date"]);
 
-    const from = new Date(filters.fromDate);
-    const to = new Date(filters.toDate);
+    const isTestNameMatch =
+      !testName || patient["Test Name"].includes(testName);
+    const isAgeInRange = minAge <= patientAge && patientAge <= maxAge;
+    const isWeightInRange =
+      minWeight <= patientWeight && patientWeight <= maxWeight;
+    const isHeightInRange =
+      minHeight <= patientHeight && patientHeight <= maxHeight;
+    const isDateInRange = from <= testDate && testDate <= to;
+    const isGenderMatch = !gender || patient["Patient Gender"] === gender;
+    const isStateMatch = !state || patient["Patient State"] === state;
 
     return (
-      (!filters.testName || patient["Test Name"].includes(filters.testName)) &&
-      filters.minAge <= patientAge &&
-      patientAge <= filters.maxAge &&
-      filters.minWeight <= patientWeight &&
-      patientWeight <= filters.maxWeight &&
-      filters.minHeight <= patientHeight &&
-      patientHeight <= filters.maxHeight &&
-      from <= testDate &&
-      testDate <= to &&
-      (!filters.gender || patient["Patient Gender"] === filters.gender) &&
-      (!filters.state || patient["Patient State"] === filters.state)
+      isTestNameMatch &&
+      isAgeInRange &&
+      isWeightInRange &&
+      isHeightInRange &&
+      isDateInRange &&
+      isGenderMatch &&
+      isStateMatch
     );
   });
 };
 
-const filterColumns = (appliedFilters: Set<string>, filters: Filters) => {
+const filterColumns = (
+  appliedFilters: Set<string>,
+  filters: Filters
+): string[] => {
   const alwaysVisibleColumns = ["Patient ID", "Patient Name", "Test Name"];
-  const columnFilters = {
+  const columnFilters: Record<string, boolean> = {
     Demographics: true,
     Details:
-      filters.minAge ||
-      filters.maxAge ||
-      filters.minWeight ||
-      filters.maxWeight ||
-      filters.minHeight ||
-      filters.maxHeight,
-    Date: filters.fromDate || filters.toDate,
+      !!filters.minAge ||
+      !!filters.maxAge ||
+      !!filters.minWeight ||
+      !!filters.maxWeight ||
+      !!filters.minHeight ||
+      !!filters.maxHeight,
+    Date: !!filters.fromDate || !!filters.toDate,
     TestDetails: true
   };
 
-  const finalColumnFilters = {
-    Demographics:
-      columnFilters.Demographics && appliedFilters.has("Demographics"),
-    Details: columnFilters.Details && appliedFilters.has("Details"),
-    Date: columnFilters.Date && appliedFilters.has("Date"),
-    TestDetails: columnFilters.TestDetails && appliedFilters.has("TestDetails")
-  };
+  const finalColumnFilters = Object.keys(columnFilters).reduce(
+    (acc, key) => {
+      acc[key] = columnFilters[key] && appliedFilters.has(key);
+      return acc;
+    },
+    {} as Record<string, boolean>
+  );
 
   return [
     ...alwaysVisibleColumns,
     ...Object.keys(finalColumnFilters).filter(
-      column => finalColumnFilters[column as keyof typeof finalColumnFilters]
+      column => finalColumnFilters[column]
     )
   ];
 };

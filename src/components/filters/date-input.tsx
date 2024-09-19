@@ -13,18 +13,16 @@ const DateInput: React.FC<DateInputProps> = ({
   label,
   value,
   onChange
-}) => {
-  return (
-    <div className="grid gap-3">
-      <Label htmlFor={id}>{label}</Label>
-      <Input
-        id={id}
-        type="date"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-      />
-    </div>
-  );
-};
+}) => (
+  <div className="grid gap-3">
+    <Label htmlFor={id}>{label}</Label>
+    <Input
+      id={id}
+      type="date"
+      value={value}
+      onChange={e => onChange(e.target.value)}
+    />
+  </div>
+);
 
 export default DateInput;

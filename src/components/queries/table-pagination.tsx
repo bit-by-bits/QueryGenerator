@@ -33,34 +33,27 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         pages.push(i);
       }
     } else {
+      const start = Math.max(1, currentPage - halfRange);
+      const end = Math.min(totalPages, currentPage + halfRange);
+
       if (currentPage <= halfRange) {
         for (let i = 1; i <= maxPagesToShow - 2; i++) {
           pages.push(i);
         }
-        pages.push(null);
-        pages.push(totalPages);
+        pages.push(null, totalPages);
       } else if (currentPage >= totalPages - halfRange) {
-        pages.push(1);
-        pages.push(null);
+        pages.push(1, null);
         for (let i = totalPages - (maxPagesToShow - 2); i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
-        pages.push(1);
-        pages.push(null);
-        for (
-          let i = currentPage - halfRange + 1;
-          i <= currentPage + halfRange - 1;
-          i++
-        ) {
+        pages.push(1, null);
+        for (let i = start; i <= end; i++) {
           pages.push(i);
         }
-        pages.push(null);
-        pages.push(totalPages);
+        pages.push(null, totalPages);
       }
     }
-
-    console.log(pages);
 
     return pages.filter(
       (item, index, arr) => !(item === null && arr[index - 1] === null)
@@ -79,9 +72,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
                 ? handleDisabledClick
                 : () => handlePageChange(currentPage - 1)
             }
-            className={`cursor-pointer ${
-              currentPage === 1 ? "cursor-not-allowed opacity-50" : ""
-            }`}
+            className={`cursor-pointer ${currentPage === 1 ? "cursor-not-allowed opacity-50" : ""}`}
           />
         </PaginationItem>
         {pages.map((page, idx) =>
@@ -108,9 +99,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
                 ? handleDisabledClick
                 : () => handlePageChange(currentPage + 1)
             }
-            className={`cursor-pointer ${
-              currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""
-            }`}
+            className={`cursor-pointer ${currentPage === totalPages ? "cursor-not-allowed opacity-50" : ""}`}
           />
         </PaginationItem>
       </PaginationContent>

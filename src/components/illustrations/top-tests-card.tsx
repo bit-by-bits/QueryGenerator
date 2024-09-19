@@ -18,23 +18,30 @@ interface TopTestsCardProps {
   patients: Patient[];
 }
 
-const getTopTests = (data: Patient[]) => {
+interface TestData {
+  test: string;
+  count: number;
+}
+
+const getTopTests = (data: Patient[]): TestData[] => {
   const testCounts = data.reduce(
     (acc, patient) => {
       const test = patient["Test Name"];
       if (test) acc[test] = (acc[test] || 0) + 1;
       return acc;
     },
-    {} as { [key: string]: number }
+    {} as Record<string, number>
   );
 
-  return Object.entries(testCounts).sort((a, b) => b[1] - a[1]);
+  return Object.entries(testCounts)
+    .map(([test, count]) => ({ test, count }))
+    .sort((a, b) => b.count - a.count);
 };
 
 const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
   const tests = getTopTests(patients);
-  const topTests = tests.slice(0, 7).map(([test, count]) => ({ test, count }));
-  const totalTestCount = tests.reduce((sum, [, count]) => sum + count, 0);
+  const topTests = tests.slice(0, 7);
+  const totalTestCount = tests.reduce((sum, { count }) => sum + count, 0);
 
   return (
     <Card className="lg:max-w-md" x-chunk="charts-01-chunk-1">
@@ -69,11 +76,7 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
           }}
           className="w-full"
         >
-          <LineChart
-            accessibilityLayer
-            margin={{ left: 14, right: 14, top: 10 }}
-            data={topTests}
-          >
+          <LineChart data={topTests} margin={{ left: 14, right: 14, top: 10 }}>
             <CartesianGrid
               strokeDasharray="4 4"
               vertical={false}
@@ -100,13 +103,14 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
               }}
             />
             <ChartTooltip
+              cursor={false}
               content={
                 <ChartTooltipContent
                   indicator="line"
                   labelFormatter={value => `Test: ${value}`}
+                  formatter={value => [`Count: ${value}`]}
                 />
               }
-              cursor={false}
             />
           </LineChart>
         </ChartContainer>

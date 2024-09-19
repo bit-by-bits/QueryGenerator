@@ -15,56 +15,42 @@ interface HealthyResultsCardProps {
   type: "month" | "test";
 }
 
-const getMonthlyHealthyResults = (data: Patient[]) => {
+interface ResultData {
+  key: string;
+  count: number;
+}
+
+const getHealthyResultsBy = (
+  data: Patient[],
+  by: "month" | "test"
+): ResultData[] => {
   const healthyResults = data.filter(
     patient => !patient.Severity || patient.Severity === "Normal"
   );
 
-  const resultsByMonth = healthyResults.reduce(
+  const resultsBy = healthyResults.reduce(
     (acc, patient) => {
-      const month = new Date(patient["Test Date"]).toLocaleString("default", {
-        month: "short"
-      });
-      acc[month] = (acc[month] || 0) + 1;
+      const key =
+        by === "month"
+          ? new Date(patient["Test Date"]).toLocaleString("default", {
+              month: "short"
+            })
+          : patient["Test Name"];
+
+      acc[key] = (acc[key] || 0) + 1;
       return acc;
     },
     {} as { [key: string]: number }
   );
 
-  return Object.keys(resultsByMonth).map(month => ({
-    key: month,
-    count: resultsByMonth[month]
-  }));
-};
-
-const getTestWiseHealthyResults = (data: Patient[]) => {
-  const healthyResults = data.filter(
-    patient => !patient.Severity || patient.Severity === "Normal"
-  );
-
-  const resultsByTest = healthyResults.reduce(
-    (acc, patient) => {
-      const test = patient["Test Name"];
-      acc[test] = (acc[test] || 0) + 1;
-      return acc;
-    },
-    {} as { [key: string]: number }
-  );
-
-  return Object.keys(resultsByTest).map(test => ({
-    key: test,
-    count: resultsByTest[test]
-  }));
+  return Object.entries(resultsBy).map(([key, count]) => ({ key, count }));
 };
 
 const HealthyResultsCard: React.FC<HealthyResultsCardProps> = ({
   patients,
   type
 }) => {
-  const data =
-    type === "month"
-      ? getMonthlyHealthyResults(patients)
-      : getTestWiseHealthyResults(patients);
+  const data = getHealthyResultsBy(patients, type);
 
   const totalPatients = data.reduce((sum, d) => sum + d.count, 0);
   const lastCount = data[data.length - 1]?.count || 0;
@@ -96,21 +82,12 @@ const HealthyResultsCard: React.FC<HealthyResultsCardProps> = ({
         </div>
         <ChartContainer
           config={{
-            patients: {
-              label: "Patients",
-              color: "hsl(var(--chart-5))"
-            }
+            patients: { label: "Patients", color: "hsl(var(--chart-5))" }
           }}
           className="ml-auto w-[64px]"
         >
           <BarChart
-            accessibilityLayer
-            margin={{
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0
-            }}
+            margin={{ left: 0, right: 0, top: 0, bottom: 0 }}
             data={data}
           >
             <Bar

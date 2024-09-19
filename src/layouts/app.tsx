@@ -1,10 +1,12 @@
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import UserDropdown from "@/components/layout/user-dropdown";
 import { URLs } from "@/routes";
+import NavLink from "@/components/layout/nav-link";
+import BriefcaseLogo from "@/components/layout/briefcase-logo";
+import SearchBar from "@/components/layout/search-bar";
 
 export const description =
   "Main layout for the Query Generator app. Includes navigation and common layout elements.";
@@ -16,27 +18,12 @@ const navLinks = [
   { path: URLs.api.inspect, label: "Inspect" }
 ];
 
-const NavLink = ({ path, label }: { path: string; label: string }) => {
-  const { pathname } = useLocation();
-  const linkClass = `transition-colors ${
-    pathname === path
-      ? "text-foreground font-semibold"
-      : "text-muted-foreground hover:text-foreground"
-  }`;
-
-  return (
-    <Link to={path} className={linkClass}>
-      {label}
-    </Link>
-  );
-};
-
 const AppLayout = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 max-w-screen items-center gap-4 border-b bg-background px-4 md:px-6 z-10">
         <nav className="hidden md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <NavLink path={URLs.app.filters} label="Query Generator" />
+          <BriefcaseLogo />
           {navLinks.map(({ path, label }) => (
             <NavLink key={path} path={path} label={label} />
           ))}
@@ -55,7 +42,7 @@ const AppLayout = () => {
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <NavLink path={URLs.app.filters} label="Query Generator" />
+              <BriefcaseLogo />
               {navLinks.map(({ path, label }) => (
                 <NavLink key={path} path={path} label={label} />
               ))}
@@ -63,17 +50,11 @@ const AppLayout = () => {
           </SheetContent>
         </Sheet>
 
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search for queries"
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
+        <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+          <SearchBar
+            placeholder="Search patients by name"
+            className="sm:w-[300px] md:w-[200px] lg:w-[300px]"
+          />
           <UserDropdown />
         </div>
       </header>

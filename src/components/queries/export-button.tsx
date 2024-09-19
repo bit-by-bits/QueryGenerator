@@ -15,18 +15,18 @@ const ExportButton: React.FC = () => {
   );
 
   const handleExport = () => {
-    const ws = XLSX.utils.json_to_sheet(filteredPatients);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Filtered Data");
+    const worksheet = XLSX.utils.json_to_sheet(filteredPatients);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Filtered Data");
 
-    XLSX.writeFile(wb, "filtered_data.xlsx");
+    XLSX.writeFile(workbook, "filtered_data.xlsx");
   };
 
   return (
     <Button
       size="sm"
       variant="outline"
-      className="gap-1"
+      className="flex items-center gap-1"
       onClick={handleExport}
     >
       <File className="h-3.5 w-3.5" />

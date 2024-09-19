@@ -27,29 +27,36 @@ interface TopStatesCardProps {
   patients: Patient[];
 }
 
-const getSortedStates = (patients: Patient[]) => {
+interface StateData {
+  state: string;
+  count: number;
+}
+
+const getSortedStates = (patients: Patient[]): StateData[] => {
   const stateCounts = patients.reduce(
     (acc, patient) => {
       const state = patient["Patient State"];
-      if (state) acc[state] = (acc[state] || 0) + 1;
+      if (state) {
+        acc[state] = (acc[state] || 0) + 1;
+      }
       return acc;
     },
-    {} as { [key: string]: number }
+    {} as Record<string, number>
   );
 
-  return Object.entries(stateCounts).sort((a, b) => b[1] - a[1]);
+  return Object.entries(stateCounts)
+    .map(([state, count]) => ({ state, count }))
+    .sort((a, b) => b.count - a.count);
 };
 
 const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
   const states = getSortedStates(patients);
-  const topStates = states
-    .slice(0, 6)
-    .map(([state, count]) => ({ state, count }));
+  const topStates = states.slice(0, 6);
   const patientsInTopStates = topStates.reduce(
     (sum, { count }) => sum + count,
     0
   );
-  const totalPatients = states.reduce((sum, [, count]) => sum + count, 0);
+  const totalPatients = states.reduce((sum, { count }) => sum + count, 0);
   const avgPatientsPerState = (totalPatients / states.length).toFixed(2);
 
   return (
@@ -73,19 +80,12 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
             }
           }}
         >
-          <BarChart
-            accessibilityLayer
-            data={topStates}
-            margin={{ left: -4, right: -4 }}
-          >
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={value => `State: ${value}`}
-                  formatter={value => [`No. of Patients: ${value}`]}
-                />
-              }
+          <BarChart data={topStates} margin={{ left: -4, right: -4 }}>
+            <XAxis
+              dataKey="state"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={4}
             />
             <Bar
               dataKey="count"
@@ -93,12 +93,6 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
               radius={5}
               fillOpacity={0.6}
               activeBar={<Rectangle fillOpacity={0.8} />}
-            />
-            <XAxis
-              dataKey="state"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={4}
             />
             <ReferenceLine
               y={parseFloat(avgPatientsPerState)}
@@ -119,6 +113,15 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
                 offset={10}
               />
             </ReferenceLine>
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={value => `State: ${value}`}
+                  formatter={value => [`No. of Patients: ${value}`]}
+                />
+              }
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
