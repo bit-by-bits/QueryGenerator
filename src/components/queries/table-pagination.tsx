@@ -37,17 +37,17 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         for (let i = 1; i <= maxPagesToShow - 2; i++) {
           pages.push(i);
         }
-        pages.push(null); // Ellipsis
+        pages.push(null);
         pages.push(totalPages);
       } else if (currentPage >= totalPages - halfRange) {
         pages.push(1);
-        pages.push(null); // Ellipsis
+        pages.push(null);
         for (let i = totalPages - (maxPagesToShow - 2); i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         pages.push(1);
-        pages.push(null); // Ellipsis
+        pages.push(null);
         for (
           let i = currentPage - halfRange + 1;
           i <= currentPage + halfRange - 1;
@@ -55,14 +55,13 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         ) {
           pages.push(i);
         }
-        pages.push(null); // Ellipsis
+        pages.push(null);
         pages.push(totalPages);
       }
     }
 
     console.log(pages);
 
-    // Remove duplicate entries
     return pages.filter(
       (item, index, arr) => !(item === null && arr[index - 1] === null)
     );

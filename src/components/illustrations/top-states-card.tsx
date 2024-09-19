@@ -27,8 +27,8 @@ interface TopStatesCardProps {
   patients: Patient[];
 }
 
-const getStates = (data: Patient[]) => {
-  const stateCounts = data.reduce(
+const getSortedStates = (patients: Patient[]) => {
+  const stateCounts = patients.reduce(
     (acc, patient) => {
       const state = patient["Patient State"];
       if (state) acc[state] = (acc[state] || 0) + 1;
@@ -37,32 +37,29 @@ const getStates = (data: Patient[]) => {
     {} as { [key: string]: number }
   );
 
-  const sortedStates = Object.entries(stateCounts).sort((a, b) => b[1] - a[1]);
-
-  return sortedStates;
+  return Object.entries(stateCounts).sort((a, b) => b[1] - a[1]);
 };
 
 const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
-  const states = getStates(patients);
-
+  const states = getSortedStates(patients);
   const topStates = states
     .slice(0, 6)
     .map(([state, count]) => ({ state, count }));
-
-  const statesAvg = (
-    states.reduce((sum, state) => sum + state[1], 0) / states.length
-  ).toFixed(2);
-
-  const statesSum = states.reduce((sum, state) => sum + state[1], 0);
+  const patientsInTopStates = topStates.reduce(
+    (sum, { count }) => sum + count,
+    0
+  );
+  const totalPatients = states.reduce((sum, [, count]) => sum + count, 0);
+  const avgPatientsPerState = (totalPatients / states.length).toFixed(2);
 
   return (
     <Card className="lg:max-w-md" x-chunk="charts-01-chunk-0">
       <CardHeader className="space-y-0 pb-2">
         <CardDescription>Top 6 States/UTs</CardDescription>
         <CardTitle className="text-4xl">
-          {statesSum} Patients
+          {patientsInTopStates} of {totalPatients}
           <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground ml-1">
-            in total
+            patients live in these states
           </span>
         </CardTitle>
       </CardHeader>
@@ -79,10 +76,7 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
           <BarChart
             accessibilityLayer
             data={topStates}
-            margin={{
-              left: -4,
-              right: -4
-            }}
+            margin={{ left: -4, right: -4 }}
           >
             <ChartTooltip
               cursor={false}
@@ -107,7 +101,7 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
               tickMargin={4}
             />
             <ReferenceLine
-              y={statesAvg}
+              y={parseFloat(avgPatientsPerState)}
               stroke="hsl(var(--muted-foreground))"
               strokeDasharray="3 3"
               strokeWidth={1}
@@ -120,11 +114,9 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
               />
               <Label
                 position="insideTopLeft"
-                value={statesAvg}
-                className="text-lg"
+                value={avgPatientsPerState}
                 fill="hsl(var(--foreground))"
                 offset={10}
-                startOffset={100}
               />
             </ReferenceLine>
           </BarChart>
@@ -132,7 +124,7 @@ const TopStatesCard: React.FC<TopStatesCardProps> = ({ patients }) => {
       </CardContent>
 
       <CardFooter className="flex flex-row border-t p-4">
-        <div className="flex w-full items-center gap-4">
+        <div className="flex w-full items-center gap-2">
           {topStates.slice(0, 3).map((state, index) => (
             <React.Fragment key={index}>
               <div className="grid flex-1 auto-rows-min gap-0.5">

@@ -28,16 +28,13 @@ const getTopTests = (data: Patient[]) => {
     {} as { [key: string]: number }
   );
 
-  const sortedTests = Object.entries(testCounts).sort((a, b) => b[1] - a[1]);
-
-  return sortedTests;
+  return Object.entries(testCounts).sort((a, b) => b[1] - a[1]);
 };
 
 const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
   const tests = getTopTests(patients);
   const topTests = tests.slice(0, 7).map(([test, count]) => ({ test, count }));
-
-  const testCount = tests.reduce((sum, test) => sum + test[1], 0);
+  const totalTestCount = tests.reduce((sum, [, count]) => sum + count, 0);
 
   return (
     <Card className="lg:max-w-md" x-chunk="charts-01-chunk-1">
@@ -45,7 +42,7 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
         <div>
           <CardDescription>Tests Done</CardDescription>
           <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
-            {testCount}
+            {totalTestCount}
             <span className="text-sm font-normal tracking-normal text-muted-foreground">
               total
             </span>
@@ -74,15 +71,8 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
         >
           <LineChart
             accessibilityLayer
-            margin={{
-              left: 14,
-              right: 14,
-              top: 10
-            }}
-            data={topTests.map(({ test, count }) => ({
-              test,
-              count
-            }))}
+            margin={{ left: 14, right: 14, top: 10 }}
+            data={topTests}
           >
             <CartesianGrid
               strokeDasharray="4 4"
@@ -100,7 +90,6 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
             <Line
               dataKey="count"
               type="natural"
-              fill="var(--color-testCount)"
               stroke="var(--color-testCount)"
               strokeWidth={2}
               dot={false}
@@ -115,7 +104,6 @@ const TopTestsCard: React.FC<TopTestsCardProps> = ({ patients }) => {
                 <ChartTooltipContent
                   indicator="line"
                   labelFormatter={value => `Test: ${value}`}
-                  // formatter={value => [`No. of Patients: ${value}`]}
                 />
               }
               cursor={false}
