@@ -1,4 +1,4 @@
-import { BriefcaseMedical, Menu, Search } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -10,36 +10,35 @@ export const description =
   "Main layout for the Query Generator app. Includes navigation and common layout elements.";
 
 const navLinks = [
-  {
-    path: URLs.filters,
-    label: "Filters"
-  },
-  { path: URLs.queries, label: "Queries" },
-  { path: URLs.illustrations, label: "Illustrations" },
-  { path: URLs.inspect, label: "Inspect" }
+  { path: URLs.app.filters, label: "Filters" },
+  { path: URLs.app.queries, label: "Queries" },
+  { path: URLs.app.illustrations, label: "Illustrations" },
+  { path: URLs.api.inspect, label: "Inspect" }
 ];
 
-const AppLayout = () => {
+const NavLink = ({ path, label }: { path: string; label: string }) => {
   const { pathname } = useLocation();
+  const linkClass = `transition-colors ${
+    pathname === path
+      ? "text-foreground font-semibold"
+      : "text-muted-foreground hover:text-foreground"
+  }`;
 
-  const getLinkClass = (path: string) =>
-    `transition-colors ${pathname === path ? "text-foreground font-semibold" : "text-muted-foreground hover:text-foreground"}`;
+  return (
+    <Link to={path} className={linkClass}>
+      {label}
+    </Link>
+  );
+};
 
+const AppLayout = () => {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 flex h-16 max-w-screen items-center gap-4 border-b bg-background px-4 md:px-6 z-10">
-        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link
-            to={URLs.filters}
-            className={`flex items-center gap-2 ${getLinkClass(URLs.filters)}`}
-          >
-            <BriefcaseMedical className="h-6 w-6" />
-            <span className="sr-only">Query Generator</span>
-          </Link>
+        <nav className="hidden md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+          <NavLink path={URLs.app.filters} label="Query Generator" />
           {navLinks.map(({ path, label }) => (
-            <Link key={path} to={path} className={getLinkClass(path)}>
-              {label}
-            </Link>
+            <NavLink key={path} path={path} label={label} />
           ))}
         </nav>
 
@@ -56,24 +55,16 @@ const AppLayout = () => {
           </SheetTrigger>
           <SheetContent side="left">
             <nav className="grid gap-6 text-lg font-medium">
-              <Link
-                to={URLs.filters}
-                className={`flex items-center gap-2 ${getLinkClass(URLs.filters)}`}
-              >
-                <BriefcaseMedical className="h-6 w-6" />
-                <span className="sr-only">Query Generator</span>
-              </Link>
+              <NavLink path={URLs.app.filters} label="Query Generator" />
               {navLinks.map(({ path, label }) => (
-                <Link key={path} to={path} className={getLinkClass(path)}>
-                  {label}
-                </Link>
+                <NavLink key={path} path={path} label={label} />
               ))}
             </nav>
           </SheetContent>
         </Sheet>
 
         <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
+          <form className="flex-1 sm:flex-initial">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input

@@ -9,7 +9,7 @@ interface RouteError {
 export const description =
   "Error page for the Query Generator app. Displays an error message and a link to go back to the login page.";
 
-export default function ErrorPage() {
+const ErrorPage = () => {
   const error = useRouteError() as RouteError;
   console.error(error);
 
@@ -25,10 +25,11 @@ export default function ErrorPage() {
           {error.statusText || error.message}
         </p>
       )}
-      <Link to={URLs.login} className="mt-4 text-blue-500 underline">
-        {" "}
+      <Link to={URLs.auth.login} className="mt-4 text-blue-500 underline">
         ← Go back to login
       </Link>
     </div>
   );
-}
+};
+
+export default ErrorPage;

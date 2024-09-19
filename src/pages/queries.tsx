@@ -7,14 +7,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table";
+import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table";
 import patients from "@/data/patients.json";
 import FilterButton from "@/components/queries/filter-button";
 import ExportButton from "@/components/queries/export-button";
@@ -22,11 +15,15 @@ import ModifyFiltersButton from "@/components/queries/modify-filters-button";
 import TablePagination from "@/components/queries/table-pagination";
 import { useFilters } from "@/context/FilterContext/FiltersContextUser";
 import { filterColumns, filterPatients } from "@/components/queries/filters";
+import TableHeaders from "@/components/queries/table-headers";
+import TableCells from "@/components/queries/table-cells";
 
 export const description =
   "Queries page for the Query Generator app. Displays queried data based on the filters applied.";
 
-function Queries() {
+const ITEMS_PER_PAGE = 10;
+
+const Queries = () => {
   const { filters } = useFilters();
   const [currentPage, setCurrentPage] = useState(1);
   const [appliedFilters, setAppliedFilters] = useState<Set<string>>(
@@ -37,8 +34,8 @@ function Queries() {
   const filteredColumns = filterColumns(appliedFilters, filters);
 
   const paginatedPatients = filteredPatients.slice(
-    (currentPage - 1) * 10,
-    (currentPage - 1) * 10 + 10
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
   );
 
   const handlePageChange = (page: number) => {
@@ -70,68 +67,13 @@ function Queries() {
           <Table>
             <TableHeader>
               <TableRow>
-                {filteredColumns.includes("Patient ID") && (
-                  <TableHead>ID</TableHead>
-                )}
-                {filteredColumns.includes("Patient Name") && (
-                  <TableHead>Name</TableHead>
-                )}
-                {filteredColumns.includes("Demographics") && (
-                  <TableHead>Demographics</TableHead>
-                )}
-                {filteredColumns.includes("Test Name") && (
-                  <TableHead>Test Name</TableHead>
-                )}
-                {filteredColumns.includes("Details") && (
-                  <TableHead>Details</TableHead>
-                )}
-                {filteredColumns.includes("Date") && (
-                  <TableHead>Date</TableHead>
-                )}
-                {filteredColumns.includes("TestDetails") && (
-                  <TableHead>Test Details</TableHead>
-                )}
+                <TableHeaders columns={filteredColumns} />
               </TableRow>
             </TableHeader>
             <TableBody>
               {paginatedPatients.map(patient => (
                 <TableRow key={patient["Patient ID"]}>
-                  {filteredColumns.includes("Patient ID") && (
-                    <TableCell>{patient["Patient ID"]}</TableCell>
-                  )}
-                  {filteredColumns.includes("Patient Name") && (
-                    <TableCell className="font-medium">
-                      {patient["Patient Name"]}
-                    </TableCell>
-                  )}
-                  {filteredColumns.includes("Demographics") && (
-                    <TableCell className="flex flex-col gap-1">
-                      <span>{`Gender: ${patient["Patient Gender"]}`}</span>
-                      <span>{`State: ${patient["Patient State"]}`}</span>
-                    </TableCell>
-                  )}
-                  {filteredColumns.includes("Test Name") && (
-                    <TableCell className="font-medium">
-                      {patient["Test Name"]}
-                    </TableCell>
-                  )}
-                  {filteredColumns.includes("Details") && (
-                    <TableCell className="flex flex-col gap-1">
-                      <span>{`Age: ${patient["Patient Age"]} yrs`}</span>
-                      <span>{`Height: ${patient["Patient Height"]} m`}</span>
-                      <span>{`Weight: ${patient["Patient Weight"]} kgs`}</span>
-                    </TableCell>
-                  )}
-                  {filteredColumns.includes("Date") && (
-                    <TableCell>{patient["Test Date"]}</TableCell>
-                  )}
-                  {filteredColumns.includes("TestDetails") && (
-                    <TableCell className="flex flex-col gap-1">
-                      <span>{`Value: ${patient["Test Value"]} ${patient["Test Unit"]}`}</span>
-                      <span>{`Severity: ${patient["Severity"]}`}</span>
-                      <span>{`Diagnosis: ${patient["Diagnosis"]}`}</span>
-                    </TableCell>
-                  )}
+                  <TableCells columns={filteredColumns} patient={patient} />
                 </TableRow>
               ))}
             </TableBody>
@@ -140,13 +82,13 @@ function Queries() {
         <CardFooter>
           <TablePagination
             currentPage={currentPage}
-            totalPages={Math.ceil(filteredPatients.length / 10)}
+            totalPages={Math.ceil(filteredPatients.length / ITEMS_PER_PAGE)}
             handlePageChange={handlePageChange}
           />
         </CardFooter>
       </Card>
     </div>
   );
-}
+};
 
 export default Queries;

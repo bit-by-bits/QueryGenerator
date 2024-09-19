@@ -43,7 +43,7 @@ export const FiltersContext = createContext<FiltersContextType | undefined>(
 );
 
 export const FiltersProvider = ({ children }: { children: ReactNode }) => {
-  const [filters, setFilters] = useState<Filters>({
+  const defaultFilters: Filters = {
     testName: "",
     minAge: 18,
     maxAge: 65,
@@ -55,7 +55,9 @@ export const FiltersProvider = ({ children }: { children: ReactNode }) => {
     toDate: "2024-12-31",
     gender: "",
     state: ""
-  });
+  };
+
+  const [filters, setFilters] = useState<Filters>(defaultFilters);
 
   const setFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
     setFilters(prevFilters => ({
@@ -64,21 +66,7 @@ export const FiltersProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-  const resetFilters = () => {
-    setFilters({
-      testName: "",
-      minAge: 18,
-      maxAge: 65,
-      minWeight: 50,
-      maxWeight: 120,
-      minHeight: 150,
-      maxHeight: 200,
-      fromDate: "2020-01-01",
-      toDate: "2024-12-31",
-      gender: "",
-      state: ""
-    });
-  };
+  const resetFilters = () => setFilters(defaultFilters);
 
   return (
     <FiltersContext.Provider value={{ filters, setFilter, resetFilters }}>

@@ -1,15 +1,14 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext/AuthContextUser";
 import { URLs } from "@/routes";
+import FormField from "@/components/login/form-field";
 
 export const description =
   "Login page for the Query Generator app. Users can login with their email and password.";
 
-function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +22,7 @@ function Login() {
 
     try {
       await login(email, password);
-      navigate(URLs.filters);
+      navigate(URLs.app.filters);
       console.log("Logged in successfully");
     } catch (err) {
       setError("Invalid credentials");
@@ -43,53 +42,49 @@ function Login() {
       {error && <p className="text-red-500">{error}</p>}
 
       <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            placeholder="m@example.com"
-            required
-          />
-        </div>
+        <FormField
+          id="email"
+          type="email"
+          label="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="m@example.com"
+          required
+        />
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="password">Password</Label>
+        <FormField
+          id="password"
+          type="password"
+          label="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          extra={
             <Link
-              to={URLs.forgotPassword}
+              to={URLs.auth.forgotPassword}
               className="text-sm underline text-blue-500"
             >
               Forgot your password?
             </Link>
-          </div>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          }
+        />
 
         <Button type="submit" className="w-full">
           Login
         </Button>
         <Button variant="outline" className="w-full" asChild>
-          <Link to={URLs.google}>Login with Google</Link>
+          <Link to={URLs.auth.google}>Login with Google</Link>
         </Button>
       </div>
 
       <div className="mt-4 text-sm text-center">
         Don&apos;t have an account?{" "}
-        <Link to={URLs.signUp} className="underline text-blue-500">
+        <Link to={URLs.auth.signUp} className="underline text-blue-500">
           Sign up
         </Link>
       </div>
     </form>
   );
-}
+};
 
 export default Login;

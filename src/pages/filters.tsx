@@ -20,30 +20,30 @@ import { URLs } from "@/routes";
 export const description =
   "Filters page for the Query Generator app. Allows users to set filters for generating queries.";
 
-function Filters() {
+const Filters = () => {
   const navigate = useNavigate();
   const { filters, setFilter, resetFilters } = useFilters();
 
   const handleGenerateQuery = () => {
     console.log("Generating query with filters:", filters);
-    navigate(URLs.queries);
+    navigate(URLs.app.queries);
   };
 
   const handleCopyApiUrl = () => {
     const baseUrl = "localhost:5173/api/queries";
 
     const queryParams = new URLSearchParams({
-      testName: filters?.testName || "",
-      minAge: filters?.minAge.toString(),
-      maxAge: filters?.maxAge.toString(),
-      minWeight: filters?.minWeight.toString(),
-      maxWeight: filters?.maxWeight.toString(),
-      minHeight: filters?.minHeight.toString(),
-      maxHeight: filters?.maxHeight.toString(),
-      fromDate: filters?.fromDate,
-      toDate: filters?.toDate,
-      gender: filters?.gender || "",
-      state: filters?.state || ""
+      testName: filters.testName || "",
+      minAge: filters.minAge?.toString() || "",
+      maxAge: filters.maxAge?.toString() || "",
+      minWeight: filters.minWeight?.toString() || "",
+      maxWeight: filters.maxWeight?.toString() || "",
+      minHeight: filters.minHeight?.toString() || "",
+      maxHeight: filters.maxHeight?.toString() || "",
+      fromDate: filters.fromDate || "",
+      toDate: filters.toDate || "",
+      gender: filters.gender || "",
+      state: filters.state || ""
     });
 
     const apiUrl = `${baseUrl}?${queryParams.toString()}`;
@@ -194,6 +194,6 @@ function Filters() {
       </div>
     </div>
   );
-}
+};
 
 export default Filters;

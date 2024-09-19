@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const description =
   "Unavailable page for the Query Generator app. Displays a message and a link to go back to the login page.";
 
-export default function UnavailablePage() {
+const UnavailablePage = () => {
   return (
     <div
       id="unavailable-page"
@@ -13,10 +13,11 @@ export default function UnavailablePage() {
       <h1 className="text-4xl font-bold mb-4">Oops!</h1>
       <p className="mb-2">Sorry, this page is currently unavailable.</p>
       <p className="text-gray-500 italic">Please check back later.</p>
-      <Link to={URLs.login} className="mt-4 text-blue-500 underline">
-        {" "}
+      <Link to={URLs.auth.login} className="mt-4 text-blue-500 underline">
         ← Go back to login
       </Link>
     </div>
   );
-}
+};
+
+export default UnavailablePage;
