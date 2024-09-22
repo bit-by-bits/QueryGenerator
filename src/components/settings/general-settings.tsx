@@ -7,16 +7,15 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/AuthContext/AuthContextUser";
+import Message from "./message";
+import InputField from "./input-field";
 
-const isImageUrl = (url: string) => {
-  return /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/.test(url);
-};
+const isImageUrl = (url: string) =>
+  /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/.test(url);
 
-const GeneralSettings = () => {
+const GeneralSettings: React.FC = () => {
   const { user, updateUserInfo } = useAuth();
   const [storeName, setStoreName] = useState(user?.name || "");
   const [profilePicUrl, setProfilePicUrl] = useState<string | null>(
@@ -34,7 +33,6 @@ const GeneralSettings = () => {
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
-
     if (url && isImageUrl(url)) {
       setProfilePicUrl(url);
       setMessage(null);
@@ -49,14 +47,14 @@ const GeneralSettings = () => {
   const handleSave = async () => {
     if (storeName && profilePicUrl) {
       try {
-        updateUserInfo(storeName, profilePicUrl);
+        await updateUserInfo(storeName, profilePicUrl);
         setMessage({ text: "Settings updated successfully!", type: "success" });
       } catch (error) {
+        console.error(error);
         setMessage({
           text: "Failed to update settings. Please try again.",
           type: "error"
         });
-        console.log(error);
       } finally {
         setTimeout(() => setMessage(null), 3000);
       }
@@ -78,30 +76,21 @@ const GeneralSettings = () => {
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-6">
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="storeName">User Name</Label>
-            <Input
-              id="storeName"
-              value={storeName}
-              onChange={e => setStoreName(e.target.value)}
-              placeholder="Store Name"
-            />
-          </div>
-
-          <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="profilePicUrl">Profile Picture URL</Label>
-            <Input
-              id="profilePicUrl"
-              value={profilePicUrl || ""}
-              onChange={handleProfilePicChange}
-              placeholder="Enter image URL"
-            />
-            <p className="text-gray-500 text-sm min-w-max">
-              Please enter a valid image URL (like
-              https://example.com/image.jpg).
-            </p>
-          </div>
-
+          <InputField
+            id="storeName"
+            label="User Name"
+            value={storeName}
+            onChange={e => setStoreName(e.target.value)}
+            placeholder="Store Name"
+          />
+          <InputField
+            id="profilePicUrl"
+            label="Profile Picture URL"
+            value={profilePicUrl || ""}
+            onChange={handleProfilePicChange}
+            placeholder="Enter image URL"
+            helperText="Please enter a valid image URL (like https://example.com/image.jpg)."
+          />
           {profilePicUrl && (
             <img
               src={profilePicUrl}
@@ -113,13 +102,7 @@ const GeneralSettings = () => {
       </CardContent>
       <CardFooter className="border-t px-6 py-4 flex items-center justify-between">
         <Button onClick={handleSave}>Update Details</Button>
-        {message && (
-          <p
-            className={`mt-2 text-sm ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-          >
-            {message.text}
-          </p>
-        )}
+        {message && <Message text={message.text} type={message.type} />}
       </CardFooter>
     </Card>
   );

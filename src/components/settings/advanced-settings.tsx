@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useTheme } from "@/context/ThemeContext/ThemeContextUser";
+import ThemeToggleButton from "./theme-toggle-button";
 
-const AdvancedSettings = () => {
-  const [message, setMessage] = useState<{
-    text: string;
-    type: "success" | "error" | null;
-  } | null>(null);
-
-  const handleSave = async () => {};
+const AdvancedSettings: React.FC = () => {
+  const { theme, setTheme } = useTheme();
 
   return (
     <Card>
@@ -24,18 +18,13 @@ const AdvancedSettings = () => {
         <CardDescription>Update your app preferences here.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col gap-6"></form>
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col items-start">
+            <span>Current Theme: {theme}</span>
+            <ThemeToggleButton setTheme={setTheme} />
+          </div>
+        </div>
       </CardContent>
-      <CardFooter className="border-t px-6 py-4 flex items-center justify-between">
-        <Button onClick={handleSave}>Update Preferences</Button>
-        {message && (
-          <p
-            className={`mt-2 text-sm ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-          >
-            {message.text}
-          </p>
-        )}
-      </CardFooter>
     </Card>
   );
 };

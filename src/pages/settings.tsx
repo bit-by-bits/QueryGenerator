@@ -45,7 +45,7 @@ const Settings = () => {
     sectionParam === section || (!sectionParam && section === sections.GENERAL);
 
   return (
-    <div className="grid flex-1 auto-rows-max gap-4">
+    <div className="grid flex-1 auto-rows-max gap-6">
       <div className="mx-auto grid w-full max-w-6xl gap-2">
         <h1 className="text-3xl font-semibold">Settings</h1>
       </div>

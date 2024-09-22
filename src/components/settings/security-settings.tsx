@@ -10,10 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext/AuthContextUser";
+import Message from "./message";
 
-const SecuritySettings = () => {
+const SecuritySettings: React.FC = () => {
   const { user, updateEmail } = useAuth();
-  const [newEmail, setNewEmail] = useState("");
+  const [newEmail, setNewEmail] = useState<string>("");
   const [message, setMessage] = useState<{
     text: string;
     type: "success" | "error" | null;
@@ -32,7 +33,7 @@ const SecuritySettings = () => {
     }
 
     try {
-      updateEmail(newEmail);
+      await updateEmail(newEmail);
       setMessage({ text: "Email updated successfully!", type: "success" });
     } catch (error) {
       setMessage({
@@ -65,13 +66,7 @@ const SecuritySettings = () => {
       </CardContent>
       <CardFooter className="border-t px-6 py-4 flex items-center justify-between">
         <Button onClick={handleEmailUpdate}>Update Email</Button>
-        {message && (
-          <p
-            className={`mt-2 text-sm ${message.type === "success" ? "text-green-500" : "text-red-500"}`}
-          >
-            {message.text}
-          </p>
-        )}
+        {message && <Message text={message.text} type={message.type} />}
       </CardFooter>
     </Card>
   );

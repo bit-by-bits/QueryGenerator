@@ -13,6 +13,7 @@ import LoginImg from "./assets/login.jpeg";
 import { URLs } from "./routes";
 
 // Context Providers
+import { ThemeProvider } from "./context/ThemeContext/ThemeContextProvider";
 import { AuthProvider } from "./context/AuthContext/AuthContextProvider";
 import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
 
@@ -28,6 +29,7 @@ import Login from "./pages/login";
 import Queries from "./pages/queries";
 import Illustrations from "./pages/illustrations";
 import Settings from "./pages/settings";
+import Inspect from "./pages/inspect";
 
 // Helper function to create routes
 const createRoutes = () => [
@@ -84,7 +86,7 @@ const createRoutes = () => [
     children: [
       {
         path: URLs.api.inspect,
-        element: <UnavailablePage />
+        element: <Inspect />
       }
     ]
   }
@@ -98,11 +100,13 @@ const rootElement = document.getElementById("root");
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
-      <AuthProvider>
-        <FiltersProvider>
-          <RouterProvider router={router} />
-        </FiltersProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <FiltersProvider>
+            <RouterProvider router={router} />
+          </FiltersProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </StrictMode>
   );
 }

@@ -10,7 +10,12 @@ import TestWisePatientsCard from "@/components/illustrations/text-wise-patients-
 export const description =
   "Illustrations page for the Query Generator app. Displays a collection of charts related to patient data.";
 
-const cardComponents = [
+const cardComponents: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Component: React.FC<any>;
+  key: string;
+  props?: Record<string, unknown>;
+}[] = [
   { Component: TopStatesCard, key: "top-states" },
   { Component: TopTestsCard, key: "top-tests" },
   { Component: TestWisePatientsCard, key: "test-wise" },
@@ -31,21 +36,31 @@ const cardComponents = [
 
 const Illustrations = () => {
   return (
-    <div className="chart-wrapper mx-auto flex flex-col flex-wrap items-start justify-center gap-6 sm:flex-row">
-      <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[22rem] lg:grid-cols-1 xl:max-w-[25rem]">
-        {cardComponents.slice(0, 2).map(({ Component, key, props }) => (
-          <Component key={key} patients={patients} {...props} />
-        ))}
+    <div className="grid flex-1 items-start gap-6">
+      <div className="flex items-center">
+        <div className="hidden items-center gap-2 md:ml-auto md:flex w-full">
+          <h1 className="flex-1 text-xl font-semibold tracking-tight">
+            Illustration Charts
+          </h1>
+          <div className="flex items-center gap-2"></div>
+        </div>
       </div>
-      <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
-        {cardComponents.slice(2, 5).map(({ Component, key, props }) => (
-          <Component key={key} patients={patients} {...props} />
-        ))}
-      </div>
-      <div className="grid w-full flex-1 gap-6">
-        {cardComponents.slice(5).map(({ Component, key, props }) => (
-          <Component key={key} patients={patients} {...props} />
-        ))}
+      <div className="chart-wrapper flex flex-col flex-wrap items-start justify-center gap-6 sm:flex-row">
+        <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[22rem] lg:grid-cols-1 xl:max-w-[25rem]">
+          {cardComponents.slice(0, 2).map(({ Component, key, props }) => (
+            <Component key={key} patients={patients} {...props} />
+          ))}
+        </div>
+        <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
+          {cardComponents.slice(2, 5).map(({ Component, key, props }) => (
+            <Component key={key} patients={patients} {...props} />
+          ))}
+        </div>
+        <div className="grid w-full flex-1 gap-6">
+          {cardComponents.slice(5).map(({ Component, key, props }) => (
+            <Component key={key} patients={patients} {...props} />
+          ))}
+        </div>
       </div>
     </div>
   );

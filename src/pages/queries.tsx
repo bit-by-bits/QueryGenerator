@@ -54,7 +54,7 @@ const Queries = () => {
   };
 
   return (
-    <div className="grid flex-1 items-start gap-4">
+    <div className="grid flex-1 items-start gap-6">
       <div className="flex items-center">
         <div className="hidden items-center gap-2 md:ml-auto md:flex w-full">
           <h1 className="flex-1 text-xl font-semibold tracking-tight">

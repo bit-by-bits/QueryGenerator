@@ -55,7 +55,7 @@ const Filters = () => {
   };
 
   return (
-    <div className="mx-auto grid flex-1 auto-rows-max gap-4">
+    <div className="mx-auto grid flex-1 auto-rows-max gap-6">
       <div className="flex items-center gap-4">
         <h1 className="flex-1 text-xl font-semibold tracking-tight">
           Query Filters
