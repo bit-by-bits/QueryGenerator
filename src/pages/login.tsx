@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const { login } = useAuth();
+  const { login, updateUserInfo } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,6 +22,10 @@ const Login = () => {
 
     try {
       await login(email, password);
+      updateUserInfo(
+        "User",
+        "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+      );
       navigate(URLs.app.filters);
       console.log("Logged in successfully");
     } catch (err) {

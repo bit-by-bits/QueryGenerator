@@ -27,6 +27,7 @@ import UnavailablePage from "./pages/unavailabe";
 import Login from "./pages/login";
 import Queries from "./pages/queries";
 import Illustrations from "./pages/illustrations";
+import Settings from "./pages/settings";
 
 // Helper function to create routes
 const createRoutes = () => [
@@ -69,6 +70,10 @@ const createRoutes = () => [
       {
         path: URLs.app.illustrations,
         element: <Illustrations />
+      },
+      {
+        path: URLs.app.settings,
+        element: <Settings />
       }
     ]
   },

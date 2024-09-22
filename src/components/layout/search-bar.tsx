@@ -15,7 +15,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder, className }) => {
 
   const handleSearch = (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     if (searchTerm.trim()) {
       navigate(`${URLs.app.queries}?search=${encodeURIComponent(searchTerm)}`);
     }

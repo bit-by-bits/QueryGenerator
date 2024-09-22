@@ -10,7 +10,8 @@ export const URLs = {
     base: "/app",
     filters: "/app/filters",
     queries: "/app/queries",
-    illustrations: "/app/illustrations"
+    illustrations: "/app/illustrations",
+    settings: "/app/settings"
   },
   api: {
     base: "/api",
