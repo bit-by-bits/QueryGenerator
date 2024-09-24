@@ -38,13 +38,13 @@ const Inspect = () => {
       });
 
       addMessage(
-        "Bot",
+        "System",
         filteredPatients.length > 0 ? filteredPatients : "No data found."
       );
     } catch (err) {
       const errorMessage = (err as Error).message || "An error occurred.";
       setError(errorMessage);
-      addMessage("Bot", errorMessage);
+      addMessage("System", errorMessage);
     }
 
     setApiUrl("");
@@ -91,7 +91,7 @@ const Inspect = () => {
   return (
     <div className="relative flex flex-col rounded-xl bg-muted/50 p-4 lg:col-span-2 h-[calc(100vh-8rem)] md:h-[calc(100vh-13rem)]">
       <div
-        className="flex overflow-y-auto p-4 rounded-t-lg bg-muted/50 flex-col gap-4 h-full"
+        className="flex overflow-y-auto p-4 rounded-t-lg bg-muted/50 flex-col gap-4 h-full overflow-x-hidden"
         onScroll={handleScroll}
         ref={messagesContainerRef}
       >
@@ -103,7 +103,8 @@ const Inspect = () => {
               typeof msg.text === "object" ? (
                 <pre>{JSON.stringify(msg.text, null, 2)}</pre>
               ) : (
-                msg.text
+                <span className="whitespace-pre-wrap"
+                >{msg.text}</span>
               )
             }
           />

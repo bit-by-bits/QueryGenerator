@@ -17,12 +17,13 @@ const AdvancedSettings: React.FC = () => {
         <CardTitle>Advanced Settings</CardTitle>
         <CardDescription>Update your app preferences here.</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col items-start">
-            <span>Current Theme: {theme}</span>
-            <ThemeToggleButton setTheme={setTheme} />
-          </div>
+      <CardContent className="flex items-center justify-between">
+        <div className="flex-col flex space-y-1 gap-1">
+          <span className="text-sm font-medium">Current Theme</span>
+          <span className="text-sm font-semibold text-primary">{theme}</span>
+        </div>
+        <div className="flex justify-center">
+          <ThemeToggleButton setTheme={setTheme} />
         </div>
       </CardContent>
     </Card>

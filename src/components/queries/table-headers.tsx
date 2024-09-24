@@ -16,11 +16,11 @@ const columnHeaders: { [key: string]: string } = {
 
 const TableHeaders: React.FC<TableHeadersProps> = ({ columns }) => (
   <>
-    {columns.map(column =>
-      columnHeaders[column] ? (
+    {columns
+      .filter(column => columnHeaders[column])
+      .map(column => (
         <TableHead key={column}>{columnHeaders[column]}</TableHead>
-      ) : null
-    )}
+      ))}
   </>
 );
 

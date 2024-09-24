@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Card,
@@ -32,8 +32,7 @@ const Queries = () => {
   );
 
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const searchQuery = searchParams.get("search") || "";
+  const searchQuery = new URLSearchParams(location.search).get("search") || "";
 
   const filteredPatients = filterPatients(
     patients.filter(patient =>
@@ -49,9 +48,7 @@ const Queries = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  const handlePageChange = (page: number) => setCurrentPage(page);
 
   return (
     <div className="grid flex-1 items-start gap-6">

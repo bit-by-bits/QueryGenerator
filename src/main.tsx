@@ -1,27 +1,20 @@
-// External imports
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// Styles
 import "./index.css";
 
-// Assets
 import LoginImg from "./assets/login.jpeg";
 
-// Routes
 import { URLs } from "./routes";
 
-// Context Providers
 import { ThemeProvider } from "./context/ThemeContext/ThemeContextProvider";
 import { AuthProvider } from "./context/AuthContext/AuthContextProvider";
 import { FiltersProvider } from "./context/FilterContext/FiltersContextProvider";
 
-// Layouts
 import AppLayout from "./layouts/app";
 import AuthLayout from "./layouts/auth";
 
-// Pages
 import Filters from "./pages/filters";
 import ErrorPage from "./pages/error";
 import UnavailablePage from "./pages/unavailabe";
@@ -31,12 +24,10 @@ import Illustrations from "./pages/illustrations";
 import Settings from "./pages/settings";
 import Inspect from "./pages/inspect";
 
-// Helper function to create routes
 const createRoutes = () => [
   {
     path: URLs.auth.base,
     element: <AuthLayout coverImage={LoginImg} />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: URLs.auth.login,
@@ -53,13 +44,17 @@ const createRoutes = () => [
       {
         path: URLs.auth.signUp,
         element: <UnavailablePage />
+      },
+
+      {
+        path: "*",
+        element: <UnavailablePage />
       }
     ]
   },
   {
     path: URLs.app.base,
     element: <AppLayout />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: URLs.app.filters,
@@ -76,23 +71,35 @@ const createRoutes = () => [
       {
         path: URLs.app.settings,
         element: <Settings />
+      },
+
+      {
+        path: "*",
+        element: <UnavailablePage />
       }
     ]
   },
   {
     path: URLs.api.base,
     element: <AppLayout />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: URLs.api.inspect,
         element: <Inspect />
+      },
+
+      {
+        path: "*",
+        element: <UnavailablePage />
       }
     ]
+  },
+  {
+    path: "*",
+    element: <ErrorPage />
   }
 ];
 
-// Router configuration
 const router = createBrowserRouter(createRoutes());
 
 const rootElement = document.getElementById("root");
