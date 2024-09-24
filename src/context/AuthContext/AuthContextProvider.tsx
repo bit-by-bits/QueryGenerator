@@ -17,7 +17,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   updateUserInfo: (name: string, picture: string) => void;
-  updateEmail: (email: string) => void; // New method for updating email
+  updateEmail: (email: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
