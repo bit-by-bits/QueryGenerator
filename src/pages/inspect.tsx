@@ -103,8 +103,7 @@ const Inspect = () => {
               typeof msg.text === "object" ? (
                 <pre>{JSON.stringify(msg.text, null, 2)}</pre>
               ) : (
-                <span className="whitespace-pre-wrap"
-                >{msg.text}</span>
+                <span className="whitespace-pre-wrap">{msg.text}</span>
               )
             }
           />
