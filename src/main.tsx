@@ -1,6 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider
+} from "react-router-dom";
 
 import "./index.css";
 
@@ -25,6 +29,10 @@ import Settings from "./pages/settings";
 import Inspect from "./pages/inspect";
 
 const createRoutes = () => [
+  {
+    path: "/",
+    element: <Navigate to={URLs.auth.login} />
+  },
   {
     path: URLs.auth.base,
     element: <AuthLayout coverImage={LoginImg} />,

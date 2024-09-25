@@ -32,11 +32,17 @@ const Queries = () => {
   );
 
   const location = useLocation();
-  const searchQuery = new URLSearchParams(location.search).get("search") || "";
+  const searchParams = new URLSearchParams(location.search);
+
+  const searchQuery = searchParams.get("name") || searchParams.get("id") || "";
 
   const filteredPatients = filterPatients(
     patients.filter(patient =>
-      patient["Patient Name"].toLowerCase().includes(searchQuery.toLowerCase())
+      searchParams.has("id")
+        ? patient["Patient ID"].toString().includes(searchQuery)
+        : patient["Patient Name"]
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
     ),
     filters
   );

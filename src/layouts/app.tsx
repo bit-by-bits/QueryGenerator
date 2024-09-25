@@ -55,10 +55,7 @@ const AppLayout = () => {
         </Sheet>
 
         <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <SearchBar
-            placeholder="Search patients by name"
-            className="sm:w-[300px] md:w-[200px] lg:w-[300px]"
-          />
+          <SearchBar className="sm:w-[300px] md:w-[200px] lg:w-[300px]" />
           <UserDropdown />
           <ThemeToggleButton setTheme={setTheme} />
         </div>
