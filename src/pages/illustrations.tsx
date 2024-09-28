@@ -51,12 +51,12 @@ const Illustrations = () => {
             <Component key={key} patients={patients} {...props} />
           ))}
         </div>
-        <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
+        <div className="grid w-full flex-1 gap-6 2xl:grid-cols-2">
           {cardComponents.slice(2, 5).map(({ Component, key, props }) => (
             <Component key={key} patients={patients} {...props} />
           ))}
         </div>
-        <div className="grid w-full flex-1 gap-6">
+        <div className="grid w-full flex-1 gap-6 2xl:grid-cols-2">
           {cardComponents.slice(5).map(({ Component, key, props }) => (
             <Component key={key} patients={patients} {...props} />
           ))}
