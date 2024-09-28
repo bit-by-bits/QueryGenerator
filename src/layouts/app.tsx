@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import UserDropdown from "@/components/layout/user-dropdown";
 import { URLs } from "@/routes";
 import NavLink from "@/components/layout/nav-link";
@@ -9,6 +10,7 @@ import BriefcaseLogo from "@/components/layout/briefcase-logo";
 import SearchBar from "@/components/layout/search-bar";
 import ThemeToggleButton from "@/components/settings/theme-toggle-button";
 import { useTheme } from "@/context/ThemeContext/ThemeContextUser";
+import { useAuth } from "@/context/AuthContext/AuthContextUser";
 
 export const description =
   "Main layout for the Query Generator app. Includes navigation and common layout elements.";
@@ -22,6 +24,14 @@ const navLinks = [
 
 const AppLayout = () => {
   const { setTheme } = useTheme();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate(URLs.auth.login);
+    }
+  }, [user, navigate]);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
