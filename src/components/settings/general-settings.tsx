@@ -11,9 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext/AuthContextUser";
 import Message from "./message";
 import InputField from "./input-field";
-
-const isImageUrl = (url: string) =>
-  /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/.test(url);
+import { isValidImageURL } from "@/lib/utils";
 
 const GeneralSettings: React.FC = () => {
   const { user, updateUserInfo } = useAuth();
@@ -33,10 +31,10 @@ const GeneralSettings: React.FC = () => {
 
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
-    if (url && isImageUrl(url)) {
-      setProfilePicUrl(url);
-      setMessage(null);
-    } else {
+    setProfilePicUrl(url);
+    setMessage(null);
+
+    if (url && !isValidImageURL(url)) {
       setMessage({
         text: "Please enter a valid image URL (jpg, jpeg, png, gif, bmp, webp, svg).",
         type: "error"
@@ -45,7 +43,7 @@ const GeneralSettings: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (storeName && profilePicUrl) {
+    if (storeName && profilePicUrl && isValidImageURL(profilePicUrl)) {
       try {
         await updateUserInfo(storeName, profilePicUrl);
         setMessage({ text: "Settings updated successfully!", type: "success" });
@@ -60,7 +58,7 @@ const GeneralSettings: React.FC = () => {
       }
     } else {
       setMessage({
-        text: "User name and profile picture URL cannot be empty.",
+        text: "User name and profile picture URL cannot be empty or invalid.",
         type: "error"
       });
     }
@@ -81,7 +79,7 @@ const GeneralSettings: React.FC = () => {
             label="User Name"
             value={storeName}
             onChange={e => setStoreName(e.target.value)}
-            placeholder="Store Name"
+            placeholder="User Name"
           />
           <InputField
             id="profilePicUrl"
@@ -91,7 +89,7 @@ const GeneralSettings: React.FC = () => {
             placeholder="Enter image URL"
             helperText="Please enter a valid image URL (like https://example.com/image.jpg)."
           />
-          {profilePicUrl && (
+          {profilePicUrl && isValidImageURL(profilePicUrl) && (
             <img
               src={profilePicUrl}
               alt="Profile Preview"

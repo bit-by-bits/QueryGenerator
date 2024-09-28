@@ -9,3 +9,14 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
+
+export function capitalizeWord(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function isValidImageURL(url: string): boolean {
+  return (
+    /^(https?:\/\/.*\.(?:jpg|jpeg|png|gif|bmp|webp|svg))$/.test(url) ||
+    /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/.test(url)
+  );
+}

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { useTheme } from "@/context/ThemeContext/ThemeContextUser";
 import ThemeToggleButton from "./theme-toggle-button";
+import { capitalizeWord } from "@/lib/utils";
 
 const AdvancedSettings: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -20,7 +21,9 @@ const AdvancedSettings: React.FC = () => {
       <CardContent className="flex items-center justify-between">
         <div className="flex-col flex space-y-1 gap-1">
           <span className="text-sm font-medium">Current Theme</span>
-          <span className="text-sm font-semibold text-primary">{theme}</span>
+          <span className="text-sm font-semibold text-primary">
+            {capitalizeWord(theme)}
+          </span>
         </div>
         <div className="flex justify-center">
           <ThemeToggleButton setTheme={setTheme} />

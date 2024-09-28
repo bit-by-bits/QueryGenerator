@@ -23,6 +23,7 @@ import Filters from "./pages/filters";
 import ErrorPage from "./pages/error";
 import UnavailablePage from "./pages/unavailabe";
 import Login from "./pages/login";
+import Signup from "./pages/signup";
 import Queries from "./pages/queries";
 import Illustrations from "./pages/illustrations";
 import Settings from "./pages/settings";
@@ -51,7 +52,7 @@ const createRoutes = () => [
       },
       {
         path: URLs.auth.signUp,
-        element: <UnavailablePage />
+        element: <Signup />
       },
 
       {

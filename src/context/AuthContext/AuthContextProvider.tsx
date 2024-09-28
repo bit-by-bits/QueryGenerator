@@ -15,6 +15,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => void;
   updateUserInfo: (name: string, picture: string) => void;
   updateEmail: (email: string) => void;
@@ -37,18 +38,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = useCallback(async (email: string, password: string) => {
     const validCredentials =
       email === "test@example.com" && password === "tc4tuo5r7T58^FE4xd";
+
     if (validCredentials) {
       const loggedInUser = {
         email,
-        name: "John Doe",
-        picture: "/path/to/profile.jpg"
+        name: "User",
+        picture:
+          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
       };
+
       setUser(loggedInUser);
       localStorage.setItem("user", JSON.stringify(loggedInUser));
     } else {
       throw new Error("Invalid credentials");
     }
   }, []);
+
+  const signup = useCallback(
+    async (email: string, password: string, name: string) => {
+      const newUser = {
+        email,
+        name,
+        picture:
+          "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+      };
+
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
+    },
+    []
+  );
 
   const logout = useCallback(() => {
     setUser(null);
@@ -79,7 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, updateUserInfo, updateEmail }}
+      value={{ user, login, signup, logout, updateUserInfo, updateEmail }}
     >
       {children}
     </AuthContext.Provider>

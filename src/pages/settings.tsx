@@ -1,6 +1,7 @@
 import AdvancedSettings from "@/components/settings/advanced-settings";
 import GeneralSettings from "@/components/settings/general-settings";
 import SecuritySettings from "@/components/settings/security-settings";
+import { capitalizeWord } from "@/lib/utils";
 import { useEffect } from "react";
 import { useSearchParams, Link, useNavigate } from "react-router-dom";
 
@@ -58,7 +59,7 @@ const Settings = () => {
               className={isActive(section) ? "text-primary font-semibold" : ""}
               onClick={() => handleSectionChange(section)}
             >
-              {section.charAt(0).toUpperCase() + section.slice(1)}
+              {capitalizeWord(section)}
             </Link>
           ))}
         </nav>
