@@ -25,7 +25,7 @@ const Filters = () => {
   const navigate = useNavigate();
   const { filters, setFilter, resetFilters } = useFilters();
 
-  const [testOptions, setTestOptions] = useState([]);
+  const [testOptions, setTestOptions] = useState<string[]>([]);
 
   useEffect(() => {
     const loadTestNames = async () => {
