@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signup = useCallback(
-    async (email: string, password: string, name: string) => {
+    async (email: string, _password: string, name: string) => {
       const newUser = {
         email,
         name,

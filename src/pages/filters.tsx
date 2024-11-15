@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import tests from "@/data/tests.json";
 import genders from "@/data/genders.json";
 import states from "@/data/states.json";
 import FilterCard from "@/components/filters/filter-card";
@@ -16,6 +15,8 @@ import DateInput from "@/components/filters/date-input";
 import { useFilters } from "@/context/FilterContext/FiltersContextUser";
 import { useNavigate } from "react-router-dom";
 import { URLs } from "@/routes";
+import { useEffect, useState } from "react";
+import { fetchTestNames } from "@/lib/api";
 
 export const description =
   "Filters page for the Query Generator app. Allows users to set filters for generating queries.";
@@ -23,6 +24,17 @@ export const description =
 const Filters = () => {
   const navigate = useNavigate();
   const { filters, setFilter, resetFilters } = useFilters();
+
+  const [testOptions, setTestOptions] = useState([]);
+
+  useEffect(() => {
+    const loadTestNames = async () => {
+      const tests = await fetchTestNames();
+      setTestOptions(tests);
+    };
+
+    loadTestNames();
+  }, []);
 
   const handleGenerateQuery = () => {
     console.log("Generating query with filters:", filters);
@@ -80,7 +92,7 @@ const Filters = () => {
               id="test-name"
               label="Test Name"
               placeholder="Select test name"
-              options={tests}
+              options={testOptions}
               value={filters.testName}
               onChange={value => setFilter("testName", value)}
             />
