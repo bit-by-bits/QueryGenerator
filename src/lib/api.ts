@@ -6,7 +6,7 @@ interface ApiResponse<T> {
   data: T;
 }
 
-const BASE_URL = "http://0.0.0.0:1337";
+const BASE_URL = "http://localhost:1337";
 
 export const fetchGetApi = async <T>(endpoint: string): Promise<T> => {
   try {
